@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Volvox
+
+A modern web platform for software development, mentorship, and community learning. Built with Next.js 16, React 19, and TypeScript.
+
+## About
+
+Volvox is a software development and learning community that:
+- Showcases open-source projects and products
+- Publishes technical blog content using MDX
+- Facilitates mentorship programs for developers
+- Promotes collaborative learning and growth
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **UI**: React 19, TypeScript
+- **Styling**: Tailwind CSS v3
+- **Content**: MDX with `next-mdx-remote`
+- **Components**: Radix UI primitives
+- **Animations**: Framer Motion
+- **Icons**: Phosphor Icons, Lucide React
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20+ recommended
+- npm, yarn, pnpm, or bun
+
+### Development
 
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Create production build
+npm run build
 
-## Learn More
+# Start production server
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Linting
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run lint
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── blog/[slug]/       # Dynamic blog post routes
+│   ├── layout.tsx         # Root layout with theme provider
+│   └── page.tsx           # Homepage (Server Component)
+├── components/            # React components
+│   ├── ui/               # Reusable UI primitives
+│   ├── providers/        # Context providers (theme)
+│   └── ...               # Section components (hero, blog, etc.)
+├── data/                  # Static data (products, mentorship)
+├── hooks/                 # Custom React hooks
+└── lib/                   # Utilities and types
+    ├── blog.ts           # Blog post utilities
+    ├── types.ts          # TypeScript interfaces
+    └── utils.ts          # Helper functions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+content/
+└── blog/                  # MDX blog posts
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Key Features
+
+### Server/Client Component Architecture
+- Server Components for data fetching and SEO
+- Client Components for interactivity and browser APIs
+- Clear separation of concerns
+
+### MDX Blog System
+- Blog posts written in MDX (`content/blog/`)
+- Frontmatter metadata (title, author, date, tags)
+- Syntax highlighting with `rehype-highlight`
+- Static generation with `generateStaticParams()`
+
+### Theme System
+- Light/dark/system modes via `next-themes`
+- CSS custom properties for colors
+- Persistent theme selection
+
+### Single-Page Experience
+- Smooth scrolling navigation
+- Section-based routing
+- Dynamic section tracking
+
+## Contributing
+
+This is a personal project and learning platform. Feel free to explore the code and use it as a reference for your own projects.
+
+## License
+
+This project is private and not licensed for reuse.
