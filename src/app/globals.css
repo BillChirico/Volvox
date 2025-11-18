@@ -4,6 +4,7 @@
 
 @theme {
   /* Colors - reference existing CSS variables */
+  --color-*: initial;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -25,11 +26,13 @@
   --color-ring: var(--ring);
 
   /* Border radius */
+  --radius-*: initial;
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
   /* Animations */
+  --ease-*: initial;
   --animate-gradient-x: gradient-x 3s ease infinite;
   --animate-pulse-slow: pulse-slow 4s ease-in-out infinite;
 }
