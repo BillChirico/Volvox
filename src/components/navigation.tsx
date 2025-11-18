@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react'
-import { Moon, Sun, Menu, Github } from 'lucide-react'
+import { Menu, Github } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { ThemeToggle } from '@/components/theme-toggle'

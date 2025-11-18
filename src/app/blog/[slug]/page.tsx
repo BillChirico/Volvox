@@ -3,6 +3,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc'
 import { getPostBySlug, getAllPosts } from '@/lib/blog'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowLeft, Calendar, Clock } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -102,9 +103,11 @@ export default async function BlogPostPage({
           <div className="flex items-center gap-6 flex-wrap text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               {frontmatter.author?.avatar && (
-                <img
+                <Image
                   src={frontmatter.author.avatar}
                   alt={frontmatter.author.name}
+                  width={40}
+                  height={40}
                   className="w-10 h-10 rounded-full"
                 />
               )}
