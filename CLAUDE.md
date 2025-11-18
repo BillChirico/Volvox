@@ -4,9 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Volvox is a Next.js 16 application showcasing software development, mentorship programs, and blog content. The project was migrated from Vite to Next.js App Router and uses React 19, TypeScript, and Tailwind CSS v3.
+Volvox is a Next.js 16 application showcasing software development, mentorship programs, and blog content. The project was migrated from Vite to Next.js App Router and uses React 19, TypeScript, and Tailwind CSS v4.
 
 **Package Manager**: This project uses pnpm. The `.npmrc` file configures strict peer dependencies and disables shamefully-hoist for better dependency management.
+
+**Tailwind CSS v4**: This project uses Tailwind CSS v4 with CSS-first configuration. Theme customization is done via the `@theme` directive in `src/app/globals.css` instead of a JavaScript config file. Lightning CSS is used automatically by Next.js for faster builds.
 
 ## Development Commands
 
@@ -85,8 +87,11 @@ pnpm lint
 - Includes OpenGraph and Twitter card metadata
 
 ### Styling Approach
-- **Tailwind CSS v3**: Utility-first CSS framework
-- **Custom animations**: `gradient-x` and `pulse-slow` keyframes in tailwind config
+- **Tailwind CSS v4**: Utility-first CSS framework with CSS-first configuration
+- **Lightning CSS**: Automatic via Next.js (replaces PostCSS/Autoprefixer for faster builds)
+- **Theme Configuration**: Uses `@theme` directive in `globals.css` instead of JavaScript config
+- **Custom animations**: `gradient-x` and `pulse-slow` defined as `@keyframes` and registered via `@theme`
+- **Dark mode**: Configured via `@variant dark (&:where(.dark, .dark *))` in CSS
 - **Class variance authority**: Used for component variants (see `src/components/ui/button.tsx`)
 - **clsx + tailwind-merge**: Combined via `cn()` utility in `src/lib/utils.ts` for conditional classes
 

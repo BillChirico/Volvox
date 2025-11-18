@@ -14,7 +14,7 @@ Volvox is a software development and learning community that:
 
 - **Framework**: Next.js 16 (App Router)
 - **UI**: React 19, TypeScript
-- **Styling**: Tailwind CSS v3
+- **Styling**: Tailwind CSS v4 (CSS-first with Lightning CSS)
 - **Content**: MDX with `next-mdx-remote`
 - **Components**: Radix UI primitives
 - **Animations**: Framer Motion
