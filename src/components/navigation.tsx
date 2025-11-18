@@ -1,10 +1,12 @@
-"use client"
+'use client'
 
 import { useState } from 'react'
-import { Menu, Github } from 'lucide-react'
+import { Moon, Sun, List, GithubLogo, DiscordLogo } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { ThemeToggle } from '@/components/theme-toggle'
+import { useTheme } from '@/components/providers/theme-provider'
+import { motion } from 'framer-motion'
+import confettiLib from 'canvas-confetti'
 
 interface NavigationProps {
   onNavigate: (section: string) => void
@@ -12,7 +14,28 @@ interface NavigationProps {
 }
 
 export function Navigation({ onNavigate, currentSection }: NavigationProps) {
+  const { theme, setTheme } = useTheme()
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  const toggleTheme = () => {
+    if (theme === 'light') {
+      setTheme('dark')
+    } else {
+      setTheme('light')
+    }
+  }
+
+  const handleDiscordClick = (e: React.MouseEvent) => {
+    const rect = (e.target as HTMLElement).getBoundingClientRect()
+    const x = (rect.left + rect.width / 2) / window.innerWidth
+    const y = (rect.top + rect.height / 2) / window.innerHeight
+
+    confettiLib({
+      particleCount: 100,
+      spread: 70,
+      origin: { x, y }
+    })
+  }
 
   const navItems = [
     { id: 'home', label: 'Home' },
@@ -31,12 +54,14 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/70 backdrop-blur-xl">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex items-center justify-between h-16">
-          <button
+          <motion.button
             onClick={() => handleNavigate('home')}
             className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             <span className="text-xl font-bold text-primary">Volvox</span>
-          </button>
+          </motion.button>
 
           <div className="hidden md:flex items-center gap-1">
             {navItems.map(item => (
@@ -55,23 +80,59 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
           </div>
 
           <div className="flex items-center gap-2">
-            <ThemeToggle />
-
-            <Button
-              variant="ghost"
-              size="icon"
-              asChild
-              className="rounded-full hidden md:inline-flex hover:bg-muted"
+            <motion.div
+              whileHover={{ rotate: 180 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
-              <a href="https://github.com/VolvoxCommunity" target="_blank" rel="noopener noreferrer">
-                <Github className="h-5 w-5" />
-              </a>
-            </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTheme}
+                className="rounded-full hover:bg-muted"
+              >
+                {theme === 'light' ? (
+                  <Moon weight="fill" className="h-5 w-5" />
+                ) : (
+                  <Sun weight="fill" className="h-5 w-5" />
+                )}
+              </Button>
+            </motion.div>
+
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="ghost"
+                size="icon"
+                asChild
+                className="rounded-full hidden md:inline-flex hover:bg-muted"
+              >
+                <a href="https://github.com/VolvoxCommunity" target="_blank" rel="noopener noreferrer">
+                  <GithubLogo weight="fill" className="h-5 w-5" />
+                </a>
+              </Button>
+            </motion.div>
+
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="ghost"
+                size="icon"
+                asChild
+                className="rounded-full hidden md:inline-flex hover:bg-muted"
+              >
+                <a
+                  href="https://discord.gg/8ahXACdamN"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={handleDiscordClick}
+                >
+                  <DiscordLogo weight="fill" className="h-5 w-5" />
+                </a>
+              </Button>
+            </motion.div>
 
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="md:hidden rounded-full hover:bg-muted">
-                  <Menu className="h-6 w-6" />
+                  <List className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-64">
@@ -97,7 +158,22 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
                       className="rounded-full"
                     >
                       <a href="https://github.com/VolvoxCommunity" target="_blank" rel="noopener noreferrer">
-                        <Github className="h-5 w-5" />
+                        <GithubLogo weight="fill" className="h-5 w-5" />
+                      </a>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      asChild
+                      className="rounded-full"
+                    >
+                      <a
+                        href="https://discord.gg/8ahXACdamN"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={handleDiscordClick}
+                      >
+                        <DiscordLogo weight="fill" className="h-5 w-5" />
                       </a>
                     </Button>
                   </div>
