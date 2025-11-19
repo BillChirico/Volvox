@@ -237,7 +237,10 @@ export function Blog({ posts }: BlogProps) {
                 </div>
               </DialogHeader>
 
-              <div
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05, duration: 0.2 }}
                 className="prose prose-slate dark:prose-invert max-w-none px-6 py-8 overflow-y-auto scroll-smooth"
                 style={{ maxHeight: 'calc(90vh - 280px)' }}
                 onScroll={handleScroll}
@@ -250,21 +253,21 @@ export function Blog({ posts }: BlogProps) {
                     },
                   }}
                 />
-              </div>
+              </motion.div>
 
               {/* Footer CTA */}
               <div className="sticky bottom-0 border-t bg-background/95 backdrop-blur-sm p-4 flex items-center justify-between gap-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
                 <Button
                   variant="ghost"
                   onClick={() => setSelectedPost(null)}
-                  className="text-muted-foreground"
+                  className="text-muted-foreground transition-transform hover:scale-[1.02] active:scale-[0.98]"
                 >
                   Back
                 </Button>
 
                 <Button
                   asChild
-                  className="flex-1 sm:flex-none"
+                  className="flex-1 sm:flex-none transition-transform hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <Link href={`/blog/${selectedPost.slug}`}>
                     Read Full Article
