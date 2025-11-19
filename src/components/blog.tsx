@@ -21,7 +21,7 @@ import {
 import { Eye, ArrowRight } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { BlogPost } from "@/lib/types";
-import { trackPostView } from "@/lib/view-tracking";
+import { trackPostView, getViewedPosts } from "@/lib/view-tracking";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import remarkGfm from "remark-gfm";
@@ -30,14 +30,37 @@ interface BlogProps {
   posts: BlogPost[];
 }
 
-export function Blog({ posts }: BlogProps) {
+export function Blog({ posts: initialPosts }: BlogProps) {
+  const [posts, setPosts] = useState(initialPosts);
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
 
   const handlePostClick = async (post: BlogPost) => {
+    // Check if this is the first view in this session
+    const viewedPosts = getViewedPosts();
+    const isFirstView = !viewedPosts.has(post.slug);
+
+    // Track the view (updates database and session storage)
     await trackPostView(post.slug);
-    setSelectedPost(post);
+
+    // Optimistically update the view count
+    // Only increment if this is the first view in the session
+    if (isFirstView) {
+      const updatedPost = { ...post, views: post.views + 1 };
+
+      // Update the posts array so the card reflects the new count
+      setPosts((prevPosts) =>
+        prevPosts.map((p) =>
+          p.slug === post.slug ? updatedPost : p
+        )
+      );
+
+      // Update the modal with the new count
+      setSelectedPost(updatedPost);
+    } else {
+      setSelectedPost(post);
+    }
   };
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
