@@ -1,5 +1,5 @@
 /**
- * Represents an author record returned from Supabase.
+ * Represents an author record.
  */
 export interface Author {
   id: string;
@@ -20,7 +20,7 @@ export interface BlogPost {
   date: string;
   tags: string[];
   slug: string;
-  views: number;
+  views: number; // Deprecated - always 0
   published: boolean;
 }
 
@@ -65,7 +65,7 @@ export interface Mentee {
 }
 
 /**
- * Request options for paginated Supabase queries.
+ * @deprecated Temporary stub for backward compatibility - will be removed in Task 6
  */
 export interface PaginationOptions {
   limit?: number;
@@ -73,7 +73,7 @@ export interface PaginationOptions {
 }
 
 /**
- * Metadata returned alongside paginated results.
+ * @deprecated Temporary stub for backward compatibility - will be removed in Task 6
  */
 export interface PaginatedResult<T> {
   items: T[];
