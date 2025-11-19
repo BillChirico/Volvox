@@ -56,4 +56,65 @@ describe("View Tracking", () => {
       assert.ok(parsed.includes("post-2"));
     });
   });
+
+  describe("trackPostView", () => {
+    let fetchMock: any;
+
+    beforeEach(() => {
+      mockSessionStorage = {};
+      fetchMock = mock.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({}),
+        })
+      );
+      global.fetch = fetchMock as any;
+    });
+
+    it("tracks view for new post", async () => {
+      const { trackPostView } = await import("../src/lib/view-tracking.js");
+      await trackPostView("test-post");
+
+      assert.strictEqual(fetchMock.mock.calls.length, 1);
+      const [url, options] = fetchMock.mock.calls[0].arguments;
+      assert.strictEqual(url, "/api/blog/views");
+      assert.strictEqual(options.method, "POST");
+      assert.ok(options.body.includes("test-post"));
+
+      const stored = mockSessionStorage["volvox_viewed_posts"];
+      const parsed = JSON.parse(stored);
+      assert.ok(parsed.includes("test-post"));
+    });
+
+    it("skips tracking for already viewed post", async () => {
+      mockSessionStorage["volvox_viewed_posts"] = JSON.stringify(["test-post"]);
+      const { trackPostView } = await import("../src/lib/view-tracking.js");
+      await trackPostView("test-post");
+
+      assert.strictEqual(fetchMock.mock.calls.length, 0);
+    });
+
+    it("does not save to sessionStorage if API fails", async () => {
+      fetchMock = mock.fn(() =>
+        Promise.resolve({
+          ok: false,
+          status: 500,
+        })
+      );
+      global.fetch = fetchMock as any;
+
+      const { trackPostView } = await import("../src/lib/view-tracking.js");
+      await trackPostView("test-post");
+
+      assert.strictEqual(fetchMock.mock.calls.length, 1);
+      assert.strictEqual(mockSessionStorage["volvox_viewed_posts"], undefined);
+    });
+
+    it("handles empty slug gracefully", async () => {
+      const { trackPostView } = await import("../src/lib/view-tracking.js");
+      await trackPostView("");
+
+      assert.strictEqual(fetchMock.mock.calls.length, 0);
+    });
+  });
 });
