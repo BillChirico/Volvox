@@ -1,6 +1,5 @@
 import { describe, it, beforeEach, mock } from "node:test";
 import assert from "node:assert";
-import { useEffect } from "react";
 
 describe("View Tracking", () => {
   let mockSessionStorage: Record<string, string>;
@@ -130,6 +129,11 @@ describe("View Tracking", () => {
     it("exports the hook function", async () => {
       const { usePostViewTracking } = await import("../src/lib/view-tracking.js");
       assert.strictEqual(typeof usePostViewTracking, "function");
+    });
+
+    it("is a function that accepts a slug parameter", async () => {
+      const { usePostViewTracking } = await import("../src/lib/view-tracking.js");
+      assert.strictEqual(usePostViewTracking.length, 1);
     });
   });
 });
