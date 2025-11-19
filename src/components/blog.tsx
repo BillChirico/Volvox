@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -9,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Dialog,
@@ -16,9 +18,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Clock, Eye } from "@phosphor-icons/react";
+import { Eye, ArrowRight } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { BlogPost } from "@/lib/types";
+import ReactMarkdown from "react-markdown";
+import rehypeHighlight from "rehype-highlight";
+import remarkGfm from "remark-gfm";
 
 interface BlogProps {
   posts: BlogPost[];
@@ -26,9 +31,24 @@ interface BlogProps {
 
 export function Blog({ posts }: BlogProps) {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const handlePostClick = (post: BlogPost) => {
     setSelectedPost(post);
+  };
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    const scrollTop = target.scrollTop;
+    const scrollHeight = target.scrollHeight - target.clientHeight;
+
+    if (scrollHeight > 0) {
+      const progress = (scrollTop / scrollHeight) * 100;
+      setScrollProgress(Math.min(progress, 100));
+    }
+
+    setIsScrolled(scrollTop > 10);
   };
 
   return (
@@ -112,10 +132,6 @@ export function Blog({ posts }: BlogProps) {
                   </div>
 
                   <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-3.5 w-3.5" />
-                      {post.readTime}
-                    </span>
                     <span>
                       {new Date(post.date).toLocaleDateString("en-US", {
                         month: "short",
@@ -143,66 +159,116 @@ export function Blog({ posts }: BlogProps) {
         )}
       </div>
 
-      <Dialog open={!!selectedPost} onOpenChange={() => setSelectedPost(null)}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <Dialog
+        open={!!selectedPost}
+        onOpenChange={() => {
+          setSelectedPost(null);
+          setScrollProgress(0);
+          setIsScrolled(false);
+        }}
+      >
+        <DialogContent className="max-w-4xl max-h-[90vh] p-0 gap-0 overflow-hidden flex flex-col">
           {selectedPost && (
             <>
-              <DialogHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage
-                      src={selectedPost.author?.avatar}
-                      alt={selectedPost.author?.name || "Volvox"}
-                    />
-                    <AvatarFallback>
-                      {(selectedPost.author?.name || "Volvox").charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">
-                      {selectedPost.author?.name || "Volvox"}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {selectedPost.author?.role || "Team"}
-                    </p>
+              <DialogHeader className={`sticky top-0 z-10 transition-all duration-200 ${
+                isScrolled ? 'shadow-md bg-background/95 backdrop-blur-sm' : 'bg-background'
+              }`}>
+                {/* Progress Bar */}
+                <div className="absolute top-0 left-0 right-0 h-0.5 bg-muted">
+                  <div
+                    className="h-full bg-gradient-to-r from-primary via-primary/80 to-primary/60 transition-all duration-150 ease-out"
+                    style={{ width: `${scrollProgress}%` }}
+                  />
+                </div>
+
+                <div className="pt-6 px-6 pb-4">
+                  {/* Author Info */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage
+                        src={selectedPost.author?.avatar}
+                        alt={selectedPost.author?.name || "Volvox"}
+                      />
+                      <AvatarFallback>
+                        {(selectedPost.author?.name || "Volvox").charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-medium">
+                        {selectedPost.author?.name || "Volvox"}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {selectedPost.author?.role || "Team"}
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                <DialogTitle className="text-2xl md:text-3xl">
-                  {selectedPost.title}
-                </DialogTitle>
+                  {/* Title */}
+                  <DialogTitle className="text-2xl md:text-3xl mb-3">
+                    {selectedPost.title}
+                  </DialogTitle>
 
-                <div className="flex items-center gap-4 text-sm text-muted-foreground pt-2">
-                  <span className="flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
-                    {selectedPost.readTime}
-                  </span>
-                  <span>
-                    {new Date(selectedPost.date).toLocaleDateString("en-US", {
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Eye className="h-4 w-4" />
-                    {selectedPost.views} views
-                  </span>
-                </div>
+                  {/* Metadata */}
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                    <span>
+                      {new Date(selectedPost.date).toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Eye className="h-4 w-4" />
+                      {selectedPost.views} views
+                    </span>
+                  </div>
 
-                <div className="flex flex-wrap gap-2 pt-3">
-                  {selectedPost.tags.map((tag) => (
-                    <Badge key={tag} variant="secondary">
-                      {tag}
-                    </Badge>
-                  ))}
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-2">
+                    {selectedPost.tags.map((tag) => (
+                      <Badge key={tag} variant="secondary">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
               </DialogHeader>
 
-              <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none mt-6">
-                <p className="text-lg text-muted-foreground leading-relaxed">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05, duration: 0.2 }}
+                className="prose prose-slate dark:prose-invert max-w-none px-6 py-8 overflow-y-auto scroll-smooth"
+                style={{ maxHeight: 'calc(90vh - 280px)' }}
+                onScroll={handleScroll}
+              >
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeHighlight]}
+                >
                   {selectedPost.content}
-                </p>
+                </ReactMarkdown>
+              </motion.div>
+
+              {/* Footer CTA */}
+              <div className="sticky bottom-0 border-t bg-background/95 backdrop-blur-sm p-4 flex items-center justify-between gap-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+                <Button
+                  variant="ghost"
+                  onClick={() => setSelectedPost(null)}
+                  className="text-muted-foreground transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  Back
+                </Button>
+
+                <Button
+                  asChild
+                  className="flex-1 sm:flex-none transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <Link href={`/blog/${selectedPost.slug}`}>
+                    Read Full Article
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Link>
+                </Button>
               </div>
             </>
           )}
