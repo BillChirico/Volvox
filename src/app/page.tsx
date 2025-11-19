@@ -1,10 +1,7 @@
 import { HomepageClient } from "@/components/homepage-client";
 import { getAllPosts } from "@/lib/blog";
-import {
-  getAllProducts,
-  getAllMentors,
-  getAllMentees,
-} from "@/lib/data";
+import { getAllProducts } from "@/lib/data";
+import { getAllMentors, getAllMentees } from "@/lib/content";
 import { reportError } from "@/lib/logger";
 
 /**
@@ -19,8 +16,8 @@ export default async function HomePage() {
   ] = await Promise.allSettled([
     getAllPosts(),
     getAllProducts(),
-    getAllMentors(),
-    getAllMentees(),
+    Promise.resolve(getAllMentors()),
+    Promise.resolve(getAllMentees()),
   ]);
 
   const blogPosts =
@@ -36,13 +33,13 @@ export default async function HomePage() {
   }
 
   const mentors =
-    mentorsResult.status === "fulfilled" ? mentorsResult.value.items : [];
+    mentorsResult.status === "fulfilled" ? mentorsResult.value : [];
   if (mentorsResult.status === "rejected") {
     reportError("Failed to load mentors for HomePage", mentorsResult.reason);
   }
 
   const mentees =
-    menteesResult.status === "fulfilled" ? menteesResult.value.items : [];
+    menteesResult.status === "fulfilled" ? menteesResult.value : [];
   if (menteesResult.status === "rejected") {
     reportError("Failed to load mentees for HomePage", menteesResult.reason);
   }
