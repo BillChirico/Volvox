@@ -7,8 +7,7 @@
     "techStack": [
       "React Native",
       "Expo",
-      "TypeScript",
-      "AsyncStorage"
+      "TypeScript"
     ],
     "features": [
       "Track progress through all 12 steps",

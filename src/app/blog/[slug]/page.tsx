@@ -4,7 +4,7 @@ import { getPostBySlug, getAllPosts } from "@/lib/blog";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Calendar, Eye } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import rehypeHighlight from "rehype-highlight";
@@ -55,7 +55,7 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { frontmatter, content, views } = await getPostBySlug(slug);
+  const { frontmatter, content } = await getPostBySlug(slug);
 
   if (!frontmatter) {
     notFound();
@@ -124,10 +124,6 @@ export default async function BlogPostPage({
               <div className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
                 <span>{frontmatter.date}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Eye className="h-4 w-4" />
-                <span>{views} views</span>
               </div>
             </div>
           </div>
