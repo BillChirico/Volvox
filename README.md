@@ -56,6 +56,12 @@ pnpm start
 pnpm lint
 ```
 
+### Testing
+
+```bash
+pnpm test
+```
+
 ### Formatting
 
 ```bash
@@ -78,12 +84,16 @@ src/
 │   ├── ui/               # Reusable UI primitives
 │   ├── providers/        # Context providers (theme)
 │   └── ...               # Section components (hero, blog, etc.)
-├── data/                  # Static data (products, mentorship)
 ├── hooks/                 # Custom React hooks
-└── lib/                   # Utilities and types
-    ├── blog.ts           # Blog post utilities
-    ├── types.ts          # TypeScript interfaces
-    └── utils.ts          # Helper functions
+├── lib/                   # Utilities and types
+│   ├── blog.ts           # Blog post utilities
+│   ├── data.ts           # Supabase data accessors
+│   ├── logger.ts         # Centralized error reporting shim
+│   ├── supabase.ts       # Typed Supabase client
+│   ├── types.ts          # TypeScript interfaces
+│   └── validation.ts     # Shared validation helpers
+└── tests/                 # Node test suites
+    └── slug-validation.test.ts
 
 content/
 └── blog/                  # MDX blog posts
@@ -115,6 +125,13 @@ content/
 - Smooth scrolling navigation
 - Section-based routing
 - Dynamic section tracking
+
+### Resilient Data & Analytics
+
+- Promise.allSettled data fetching guards against partial failures
+- Supabase queries now support pagination for products, mentors, and mentees
+- Blog view tracking validates slugs and uses sendBeacon/keepalive for durable writes
+- Node-based unit tests cover slug normalization logic to prevent regressions
 
 ## Contributing
 

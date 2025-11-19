@@ -4,9 +4,11 @@ import { getPostBySlug, getAllPosts } from "@/lib/blog";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Calendar, Clock } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PostViewTracker } from "@/components/post-view-tracker";
+import rehypeHighlight from "rehype-highlight";
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
@@ -54,7 +56,7 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { frontmatter, content } = await getPostBySlug(slug);
+  const { frontmatter, content, views } = await getPostBySlug(slug);
 
   if (!frontmatter) {
     notFound();
@@ -62,6 +64,7 @@ export default async function BlogPostPage({
 
   return (
     <div className="min-h-screen">
+      <PostViewTracker slug={slug} />
       {/* Header Navigation */}
       <header className="border-b border-border/50 bg-background/70 backdrop-blur-xl">
         <div className="container mx-auto px-4 max-w-4xl">
@@ -128,6 +131,10 @@ export default async function BlogPostPage({
                 <Clock className="h-4 w-4" />
                 <span>{frontmatter.readTime}</span>
               </div>
+              <div className="flex items-center gap-1">
+                <Eye className="h-4 w-4" />
+                <span>{views} views</span>
+              </div>
             </div>
           </div>
         </header>
@@ -148,7 +155,14 @@ export default async function BlogPostPage({
           prose-li:text-foreground/90
         "
         >
-          <MDXRemote source={content} />
+          <MDXRemote
+            source={content}
+            options={{
+              mdxOptions: {
+                rehypePlugins: [rehypeHighlight],
+              },
+            }}
+          />
         </div>
 
         {/* Footer Navigation */}

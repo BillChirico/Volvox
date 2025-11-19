@@ -1,61 +1,152 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
+import { reportError } from "./logger";
+import { supabase } from "./supabase";
 import { BlogPost } from "./types";
 
-const postsDirectory = path.join(process.cwd(), "content/blog");
+const isProduction = process.env.NODE_ENV === "production";
 
+/**
+ * Fetches all published blog posts ordered by date (newest first).
+ *
+ * @returns A list of published `BlogPost` objects.
+ */
 export async function getAllPosts(): Promise<BlogPost[]> {
-  // Ensure directory exists
-  if (!fs.existsSync(postsDirectory)) {
+  try {
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .select(
+        `
+        id,
+        title,
+        slug,
+        excerpt,
+        content,
+        date,
+        tags,
+        read_time,
+        views,
+        published,
+        author:authors (
+          id,
+          name,
+          role,
+          avatar
+        )
+      `
+      )
+      .eq("published", true)
+      .order("date", { ascending: false });
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data) {
+      return [];
+    }
+
+    return data.map(
+      (post) =>
+        ({
+          id: post.id,
+          title: post.title,
+          excerpt: post.excerpt,
+          content: post.content,
+          author: post.author,
+          date: post.date,
+          tags: post.tags || [],
+          readTime: post.read_time,
+          slug: post.slug,
+          views: post.views || 0,
+          published: post.published || false,
+        }) satisfies BlogPost
+    );
+  } catch (error) {
+    reportError("Failed to fetch blog posts", error);
+
+    if (!isProduction) {
+      throw error instanceof Error ? error : new Error(String(error));
+    }
+
     return [];
   }
-
-  const fileNames = fs.readdirSync(postsDirectory);
-  const allPosts = fileNames
-    .filter((fileName) => fileName.endsWith(".mdx"))
-    .map((fileName) => {
-      const slug = fileName.replace(/\.mdx$/, "");
-      const fullPath = path.join(postsDirectory, fileName);
-      const fileContents = fs.readFileSync(fullPath, "utf8");
-      const { data, content } = matter(fileContents);
-
-      return {
-        id: data.id || slug,
-        title: data.title,
-        excerpt: data.excerpt,
-        content,
-        author: data.author,
-        date: data.date,
-        tags: data.tags || [],
-        readTime: data.readTime,
-        slug,
-      } as BlogPost;
-    });
-
-  // Sort by date, newest first
-  return allPosts.sort((a, b) => (a.date > b.date ? -1 : 1));
 }
 
 export async function getPostBySlug(slug: string) {
-  const fullPath = path.join(postsDirectory, `${slug}.mdx`);
-  const fileContents = fs.readFileSync(fullPath, "utf8");
-  const { data, content } = matter(fileContents);
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select(
+      `
+      id,
+      title,
+      slug,
+      excerpt,
+      content,
+      date,
+      tags,
+      read_time,
+      views,
+      published,
+      author:authors (
+        id,
+        name,
+        role,
+        avatar
+      )
+    `
+    )
+    .eq("slug", slug)
+    .single();
+
+  if (error || !data) {
+    throw new Error(`Post not found: ${slug}`);
+  }
 
   return {
-    frontmatter: data,
-    content,
-    slug,
+    frontmatter: {
+      id: data.id,
+      title: data.title,
+      excerpt: data.excerpt,
+      author: data.author,
+      date: data.date,
+      tags: data.tags || [],
+      readTime: data.read_time,
+    },
+    content: data.content,
+    slug: data.slug,
+    views: data.views || 0,
   };
 }
 
+/**
+ * Retrieves all published blog slugs.
+ *
+ * @returns Array of slug strings.
+ */
 export async function getPostSlugs(): Promise<string[]> {
-  if (!fs.existsSync(postsDirectory)) {
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select("slug")
+    .eq("published", true);
+
+  if (error) {
+    console.error("Error fetching post slugs:", error);
     return [];
   }
 
-  const fileNames = fs.readdirSync(postsDirectory);
-  return fileNames
-    .filter((fileName) => fileName.endsWith(".mdx"))
-    .map((fileName) => fileName.replace(/\.mdx$/, ""));
+  return data?.map((post) => post.slug) || [];
+}
+
+/**
+ * Increments the view counter for a given blog slug.
+ *
+ * @param slug - Slug to increment.
+ */
+export async function incrementPostViews(slug: string): Promise<void> {
+  const { error } = await supabase.rpc("increment_post_views", {
+    post_slug: slug,
+  });
+
+  if (error) {
+    reportError("Error incrementing post views", error);
+  }
 }

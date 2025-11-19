@@ -1,9 +1,58 @@
-import { getAllPosts } from "@/lib/blog";
-import { products } from "@/data/products";
 import { HomepageClient } from "@/components/homepage-client";
+import { getAllPosts } from "@/lib/blog";
+import {
+  getAllProducts,
+  getAllMentors,
+  getAllMentees,
+} from "@/lib/data";
+import { reportError } from "@/lib/logger";
 
+/**
+ * Renders the homepage server component with resilient data fetching.
+ */
 export default async function HomePage() {
-  const blogPosts = await getAllPosts();
+  const [
+    blogPostsResult,
+    productsResult,
+    mentorsResult,
+    menteesResult,
+  ] = await Promise.allSettled([
+    getAllPosts(),
+    getAllProducts(),
+    getAllMentors(),
+    getAllMentees(),
+  ]);
 
-  return <HomepageClient blogPosts={blogPosts} products={products} />;
+  const blogPosts =
+    blogPostsResult.status === "fulfilled" ? blogPostsResult.value : [];
+  if (blogPostsResult.status === "rejected") {
+    reportError("Failed to load blog posts for HomePage", blogPostsResult.reason);
+  }
+
+  const products =
+    productsResult.status === "fulfilled" ? productsResult.value : [];
+  if (productsResult.status === "rejected") {
+    reportError("Failed to load products for HomePage", productsResult.reason);
+  }
+
+  const mentors =
+    mentorsResult.status === "fulfilled" ? mentorsResult.value.items : [];
+  if (mentorsResult.status === "rejected") {
+    reportError("Failed to load mentors for HomePage", mentorsResult.reason);
+  }
+
+  const mentees =
+    menteesResult.status === "fulfilled" ? menteesResult.value.items : [];
+  if (menteesResult.status === "rejected") {
+    reportError("Failed to load mentees for HomePage", menteesResult.reason);
+  }
+
+  return (
+    <HomepageClient
+      blogPosts={blogPosts}
+      products={products}
+      mentors={mentors}
+      mentees={mentees}
+    />
+  );
 }

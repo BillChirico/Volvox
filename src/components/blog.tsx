@@ -26,18 +26,9 @@ interface BlogProps {
 
 export function Blog({ posts }: BlogProps) {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
-  const [blogViews, setBlogViews] = useState<Record<string, number>>({});
 
   const handlePostClick = (post: BlogPost) => {
     setSelectedPost(post);
-    setBlogViews((currentViews) => ({
-      ...(currentViews || {}),
-      [post.id]: ((currentViews || {})[post.id] || 0) + 1,
-    }));
-  };
-
-  const getPostViews = (postId: string): number => {
-    return (blogViews || {})[postId] || 0;
   };
 
   return (
@@ -134,7 +125,7 @@ export function Blog({ posts }: BlogProps) {
                     </span>
                     <span className="flex items-center gap-1">
                       <Eye className="h-3.5 w-3.5" />
-                      {getPostViews(post.id)}
+                      {post.views}
                     </span>
                   </div>
                 </CardContent>
@@ -195,7 +186,7 @@ export function Blog({ posts }: BlogProps) {
                   </span>
                   <span className="flex items-center gap-1">
                     <Eye className="h-4 w-4" />
-                    {getPostViews(selectedPost.id)} views
+                    {selectedPost.views} views
                   </span>
                 </div>
 

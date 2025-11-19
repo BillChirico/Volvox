@@ -1,20 +1,33 @@
+/**
+ * Represents an author record returned from Supabase.
+ */
+export interface Author {
+  id: string;
+  name: string;
+  role: string;
+  avatar: string;
+}
+
+/**
+ * Describes the blog post data shape consumed by the UI.
+ */
 export interface BlogPost {
   id: string;
   title: string;
   excerpt: string;
   content: string;
-  author: {
-    name: string;
-    role: string;
-    avatar: string;
-  };
+  author: Author;
   date: string;
   tags: string[];
   readTime: string;
   slug: string;
-  views?: number;
+  views: number;
+  published: boolean;
 }
 
+/**
+ * Defines the product card content showcased on the homepage.
+ */
 export interface Product {
   id: string;
   name: string;
@@ -27,6 +40,9 @@ export interface Product {
   image: string;
 }
 
+/**
+ * Captures mentor profile information.
+ */
 export interface Mentor {
   id: string;
   name: string;
@@ -37,6 +53,9 @@ export interface Mentor {
   githubUrl?: string;
 }
 
+/**
+ * Captures mentee profile information.
+ */
 export interface Mentee {
   id: string;
   name: string;
@@ -44,4 +63,23 @@ export interface Mentee {
   goals: string;
   progress: string;
   githubUrl?: string;
+}
+
+/**
+ * Request options for paginated Supabase queries.
+ */
+export interface PaginationOptions {
+  limit?: number;
+  offset?: number;
+}
+
+/**
+ * Metadata returned alongside paginated results.
+ */
+export interface PaginatedResult<T> {
+  items: T[];
+  total: number;
+  limit: number;
+  offset: number;
+  hasMore: boolean;
 }

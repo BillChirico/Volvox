@@ -10,14 +10,26 @@ import { Mentorship } from "@/components/mentorship";
 import { About } from "@/components/about";
 import { Footer } from "@/components/footer";
 import { AnimatedBackground } from "@/components/animated-background";
-import type { BlogPost, Product } from "@/lib/types";
+import type { BlogPost, Product, Mentor, Mentee } from "@/lib/types";
 
 interface HomepageClientProps {
   blogPosts: BlogPost[];
   products: Product[];
+  mentors: Mentor[];
+  mentees: Mentee[];
 }
 
-export function HomepageClient({ blogPosts, products }: HomepageClientProps) {
+/**
+ * Client-side shell that renders the scrolling homepage layout.
+ *
+ * @param props - Prefetched collections required by the sections.
+ */
+export function HomepageClient({
+  blogPosts,
+  products,
+  mentors,
+  mentees,
+}: HomepageClientProps) {
   const [currentSection, setCurrentSection] = useState("home");
 
   const handleNavigate = (section: string) => {
@@ -85,7 +97,7 @@ export function HomepageClient({ blogPosts, products }: HomepageClientProps) {
           <Hero onNavigate={handleNavigate} />
           <Products products={products || []} />
           <Blog posts={blogPosts || []} />
-          <Mentorship mentors={[]} mentees={[]} />
+          <Mentorship mentors={mentors || []} mentees={mentees || []} />
           <About />
         </main>
 
