@@ -16,9 +16,29 @@ export function TableOfContents() {
     // Extract headings from the page
     const elements = document.querySelectorAll("h2, h3");
     const headingData: Heading[] = [];
+    const seenIds = new Set<string>();
 
     elements.forEach((element) => {
-      const id = element.id || element.textContent?.toLowerCase().replace(/\s+/g, "-") || "";
+      let baseId =
+        element.id ||
+        element.textContent
+          ?.toLowerCase()
+          .trim()
+          .replace(/\s+/g, "-")
+          .replace(/[^a-z0-9-_]/g, "")
+          .replace(/^-+|-+$/g, "") ||
+        "";
+      let id = baseId;
+      let counter = 1;
+
+      // Ensure unique IDs
+      while (seenIds.has(id)) {
+        id = `${baseId}-${counter}`;
+        counter++;
+      }
+
+      seenIds.add(id);
+
       if (!element.id) {
         element.id = id;
       }

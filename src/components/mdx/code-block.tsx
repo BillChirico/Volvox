@@ -21,14 +21,18 @@ export function CodeBlock({ children, className, filename }: CodeBlockProps) {
 
     if (typeof children === "string") {
       text = children;
-    } else if (typeof children === "object" && children !== null) {
-      // Extract text from nested code element
-      const childrenObj = children as any;
-      if (childrenObj.props?.children) {
-        text = typeof childrenObj.props.children === "string"
-          ? childrenObj.props.children
-          : "";
-      }
+    } else if (
+      children &&
+      typeof children === "object" &&
+      "props" in children &&
+      (children as any).props?.children
+    ) {
+      text = String((children as any).props.children);
+    }
+
+    if (!text) {
+      console.warn("No text content found to copy");
+      return;
     }
 
     try {

@@ -27,8 +27,17 @@ export function ImageZoom({
       {/* Thumbnail */}
       <figure className="my-8">
         <div
+          role="button"
+          tabIndex={0}
           className="relative rounded-lg overflow-hidden border border-border shadow-sm cursor-zoom-in hover:shadow-md transition-shadow duration-200"
           onClick={() => setIsOpen(true)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setIsOpen(true);
+            }
+          }}
+          aria-label={`Expand image: ${alt}`}
         >
           {width && height ? (
             <Image

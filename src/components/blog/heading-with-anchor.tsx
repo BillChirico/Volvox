@@ -13,9 +13,16 @@ export function HeadingWithAnchor({ as: Component, children, id, ...props }: Hea
   const [copied, setCopied] = useState(false);
 
   // Generate ID from text if not provided
-  const headingId = id || (typeof children === "string"
-    ? children.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "")
-    : "");
+  const headingId =
+    id ||
+    (typeof children === "string"
+      ? children
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/g, "-")
+          .replace(/[^a-z0-9-_]/g, "")
+          .replace(/^-+|-+$/g, "") // Remove leading/trailing hyphens
+      : `heading-${Math.random().toString(36).substr(2, 9)}`); // Fallback for non-string
 
   const handleCopyLink = async () => {
     const url = `${window.location.origin}${window.location.pathname}#${headingId}`;
