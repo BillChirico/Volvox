@@ -26,9 +26,24 @@ interface BlogProps {
 
 export function Blog({ posts }: BlogProps) {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const handlePostClick = (post: BlogPost) => {
     setSelectedPost(post);
+  };
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    const scrollTop = target.scrollTop;
+    const scrollHeight = target.scrollHeight - target.clientHeight;
+
+    if (scrollHeight > 0) {
+      const progress = (scrollTop / scrollHeight) * 100;
+      setScrollProgress(Math.min(progress, 100));
+    }
+
+    setIsScrolled(scrollTop > 10);
   };
 
   return (
@@ -143,7 +158,14 @@ export function Blog({ posts }: BlogProps) {
         )}
       </div>
 
-      <Dialog open={!!selectedPost} onOpenChange={() => setSelectedPost(null)}>
+      <Dialog
+        open={!!selectedPost}
+        onOpenChange={() => {
+          setSelectedPost(null);
+          setScrollProgress(0);
+          setIsScrolled(false);
+        }}
+      >
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           {selectedPost && (
             <>
