@@ -21,6 +21,7 @@ import {
 import { Eye, ArrowRight } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { BlogPost } from "@/lib/types";
+import { trackPostView } from "@/lib/view-tracking";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import remarkGfm from "remark-gfm";
@@ -34,7 +35,8 @@ export function Blog({ posts }: BlogProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const handlePostClick = (post: BlogPost) => {
+  const handlePostClick = async (post: BlogPost) => {
+    await trackPostView(post.slug);
     setSelectedPost(post);
   };
 
