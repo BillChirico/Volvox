@@ -53,15 +53,14 @@ pnpm format:check
 
 ### Content Management
 
-- **Database**: All content stored in Supabase PostgreSQL database
-- **Blog posts**: Stored in `blog_posts` table with markdown content, metadata, and view tracking
-- **Blog utilities**: `src/lib/blog.ts` provides `getAllPosts()`, `getPostBySlug()`, `getPostSlugs()`, `incrementPostViews()`
+- **Local Files**: All content stored as local MDX and JSON files in `content/` directory
+- **Blog posts**: Stored as MDX files in `content/blog/` with frontmatter (title, slug, excerpt, authorId, date, tags, published)
+- **Blog utilities**: `src/lib/blog.ts` provides `getAllPosts()`, `getPostBySlug()`, `getPostSlugs()`
 - **Content rendering**: Uses `next-mdx-remote/rsc` for server-side markdown rendering with syntax highlighting via `rehype-highlight`
-- **Products**: Stored in `products` table, fetched via `getAllProducts()` in `src/lib/data.ts`
-- **Mentorship**: Mentors and mentees stored in respective tables, fetched via `getAllMentors()` and `getAllMentees()`
-- **Authors**: Blog post authors stored in `authors` table with relational links to blog posts
-- **View tracking**: Blog post views automatically incremented via database function and API route (`/api/blog/views`)
-- **Pagination**: Product queries accept `limit`/`offset` while mentor/mentee queries return paginated metadata via `PaginatedResult<T>` to avoid loading entire tables at once
+- **Products**: Stored in `content/products.json`, fetched via `getAllProducts()` in `src/lib/data.ts`
+- **Mentorship**: Mentors and mentees stored in `content/mentors.json` and `content/mentees.json`, fetched via `getAllMentors()` and `getAllMentees()`
+- **Authors**: Blog post authors stored in `content/authors.json` with relational links via authorId in blog post frontmatter
+- **Validation**: All content validated at runtime using Zod schemas defined in `src/lib/schemas.ts`
 
 ### UI Architecture
 
@@ -82,30 +81,29 @@ pnpm format:check
 ### Type System
 
 - **Shared types**: `src/lib/types.ts` defines `BlogPost`, `Product`, `Mentor`, `Mentee`, `Author` interfaces
-- **Database types**: `src/lib/database.types.ts` contains auto-generated Supabase types
-- **Supabase client**: `src/lib/supabase.ts` exports configured Supabase client with type safety
+- **Validation schemas**: `src/lib/schemas.ts` contains Zod schemas for runtime validation of content files
 - **Path aliases**: `@/*` maps to `src/*` via tsconfig paths
 - **Strict TypeScript**: Project uses strict mode
 
-### Database Schema
+### Content Structure
 
-**Supabase PostgreSQL** with the following tables:
+```
+/content
+  /blog/*.mdx - Blog posts with frontmatter
+  authors.json - Author profiles
+  products.json - Product information
+  mentors.json - Mentor profiles
+  mentees.json - Mentee profiles
+```
 
-- `authors` - Author profiles (id, name, role, avatar)
-- `blog_posts` - Blog content (id, title, slug, excerpt, content, author_id, date, tags, views, published)
-- `products` - Product information (id, name, description, long_description, tech_stack, features, github_url, demo_url, image)
-- `mentors` - Mentor profiles (id, name, avatar, role, expertise, bio, github_url)
-- `mentees` - Mentee profiles (id, name, avatar, goals, progress, github_url)
-
-**Row Level Security (RLS)**: Enabled on all tables with policies for public read access and authenticated write access
-
-**Database Functions**: `increment_post_views(post_slug)` for atomic view count updates
-
-### Environment Variables
-
-Required in `.env.local`:
-- `NEXT_PUBLIC_SUPABASE_URL` - Supabase project URL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase anonymous/public API key
+**Blog Post Frontmatter:**
+- `title` - Post title
+- `slug` - URL slug (must match filename)
+- `excerpt` - Brief description
+- `authorId` - Reference to author in authors.json
+- `date` - Publication date (YYYY-MM-DD format)
+- `tags` - Array of tag strings
+- `published` - Boolean (only published posts are displayed)
 
 ### Custom Hooks
 
@@ -147,9 +145,9 @@ Required in `.env.local`:
 - Server-side rendering for other pages
 - `.next/` directory contains build artifacts (git-ignored)
 
-### Data Resilience & Analytics
+### Data Resilience
 
-- `src/app/page.tsx` uses `Promise.allSettled` to tolerate partial Supabase failures and logs issues via `reportError`
+- `src/app/page.tsx` uses `Promise.allSettled` to tolerate partial content loading failures and logs issues via `reportError`
 - `src/lib/logger.ts` provides the shim for forwarding server-side errors to the centralized tracker (falls back to `console.error`)
-- `src/lib/validation.ts` contains slug validation helpers used by `/api/blog/views`; covered by `tests/slug-validation.test.ts`
-- `src/components/post-view-tracker.tsx` relies on `navigator.sendBeacon` with a keepalive fetch fallback to reduce dropped analytics events
+- `src/lib/content.ts` wraps all file reads in try-catch blocks, returning empty arrays on error to prevent page crashes
+- All content is validated at runtime using Zod schemas to catch malformed data early
