@@ -7,7 +7,7 @@ const VIEWED_POSTS_KEY = "volvox_viewed_posts";
  */
 export function getViewedPosts(): Set<string> {
   try {
-    if (typeof sessionStorage === "undefined") return new Set();
+    if (typeof window === "undefined") return new Set();
     const stored = sessionStorage.getItem(VIEWED_POSTS_KEY);
     return new Set(stored ? JSON.parse(stored) : []);
   } catch {
@@ -20,7 +20,7 @@ export function getViewedPosts(): Set<string> {
  */
 export function saveViewedPosts(posts: Set<string>): void {
   try {
-    if (typeof sessionStorage === "undefined") return;
+    if (typeof window === "undefined") return;
     sessionStorage.setItem(VIEWED_POSTS_KEY, JSON.stringify([...posts]));
   } catch (error) {
     console.error("Failed to save viewed posts:", error);
@@ -32,7 +32,7 @@ export function saveViewedPosts(posts: Set<string>): void {
  * Uses sessionStorage to deduplicate across modal and full page views.
  */
 export async function trackPostView(slug: string): Promise<void> {
-  if (!slug || typeof fetch === "undefined") return;
+  if (!slug || typeof window === "undefined") return;
 
   // Check if already tracked in this session
   const viewedPosts = getViewedPosts();

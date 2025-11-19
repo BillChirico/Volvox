@@ -8,7 +8,7 @@ describe("View Tracking", () => {
   beforeEach(() => {
     mockSessionStorage = {};
 
-    global.sessionStorage = {
+    const mockStorage = {
       getItem: (key: string) => mockSessionStorage[key] || null,
       setItem: (key: string, value: string) => {
         mockSessionStorage[key] = value;
@@ -22,6 +22,13 @@ describe("View Tracking", () => {
       length: 0,
       key: () => null,
     } as Storage;
+
+    global.sessionStorage = mockStorage;
+
+    // Mock window object for SSR compatibility checks
+    (global as any).window = {
+      sessionStorage: mockStorage,
+    };
   });
 
   describe("getViewedPosts", () => {
