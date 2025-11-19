@@ -1,8 +1,12 @@
+import * as fs from "fs";
+import * as path from "path";
+import matter from "gray-matter";
 import { reportError } from "./logger";
-import { supabase } from "./supabase";
-import { BlogPost } from "./types";
+import { BlogPostFrontmatterSchema } from "./schemas";
+import { getAuthorById } from "./content";
+import type { BlogPost } from "./types";
 
-const isProduction = process.env.NODE_ENV === "production";
+const BLOG_DIR = path.join(process.cwd(), "content", "blog");
 
 /**
  * Fetches all published blog posts ordered by date (newest first).
@@ -11,106 +15,87 @@ const isProduction = process.env.NODE_ENV === "production";
  */
 export async function getAllPosts(): Promise<BlogPost[]> {
   try {
-    const { data, error } = await supabase
-      .from("blog_posts")
-      .select(
-        `
-        id,
-        title,
-        slug,
-        excerpt,
+    // Read all MDX files from content/blog
+    const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".mdx"));
+
+    const posts: BlogPost[] = [];
+
+    for (const file of files) {
+      const filePath = path.join(BLOG_DIR, file);
+      const fileContents = fs.readFileSync(filePath, "utf8");
+
+      // Parse frontmatter
+      const { data, content } = matter(fileContents);
+
+      // Validate frontmatter with Zod
+      const frontmatter = BlogPostFrontmatterSchema.parse(data);
+
+      // Only include published posts
+      if (!frontmatter.published) {
+        continue;
+      }
+
+      // Get author details
+      const author = getAuthorById(frontmatter.authorId);
+
+      posts.push({
+        id: frontmatter.slug, // Use slug as ID
+        title: frontmatter.title,
+        excerpt: frontmatter.excerpt,
         content,
-        date,
-        tags,
-        views,
-        published,
-        author:authors (
-          id,
-          name,
-          role,
-          avatar
-        )
-      `
-      )
-      .eq("published", true)
-      .order("date", { ascending: false });
-
-    if (error) {
-      throw error;
+        author,
+        date: frontmatter.date,
+        tags: frontmatter.tags,
+        slug: frontmatter.slug,
+        views: 0, // No longer tracking views
+        published: frontmatter.published,
+      });
     }
 
-    if (!data) {
-      return [];
-    }
+    // Sort by date (newest first)
+    posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-    return data.map(
-      (post) =>
-        ({
-          id: post.id,
-          title: post.title,
-          excerpt: post.excerpt,
-          content: post.content,
-          author: post.author,
-          date: post.date,
-          tags: post.tags || [],
-          slug: post.slug,
-          views: post.views || 0,
-          published: post.published || false,
-        }) satisfies BlogPost
-    );
+    return posts;
   } catch (error) {
     reportError("Failed to fetch blog posts", error);
-
-    if (!isProduction) {
-      throw error instanceof Error ? error : new Error(String(error));
-    }
-
     return [];
   }
 }
 
 export async function getPostBySlug(slug: string) {
-  const { data, error } = await supabase
-    .from("blog_posts")
-    .select(
-      `
-      id,
-      title,
-      slug,
-      excerpt,
-      content,
-      date,
-      tags,
-      views,
-      published,
-      author:authors (
-        id,
-        name,
-        role,
-        avatar
-      )
-    `
-    )
-    .eq("slug", slug)
-    .single();
+  try {
+    const filePath = path.join(BLOG_DIR, `${slug}.mdx`);
 
-  if (error || !data) {
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`Post not found: ${slug}`);
+    }
+
+    const fileContents = fs.readFileSync(filePath, "utf8");
+    const { data, content } = matter(fileContents);
+
+    // Validate frontmatter
+    const frontmatter = BlogPostFrontmatterSchema.parse(data);
+
+    // Get author details
+    const author = getAuthorById(frontmatter.authorId);
+
+    return {
+      frontmatter: {
+        id: frontmatter.slug,
+        title: frontmatter.title,
+        excerpt: frontmatter.excerpt,
+        author,
+        date: frontmatter.date,
+        tags: frontmatter.tags,
+      },
+      content,
+      slug: frontmatter.slug,
+      views: 0, // No longer tracking views
+    };
+  } catch (error) {
+    reportError(`Failed to fetch post: ${slug}`, error);
     throw new Error(`Post not found: ${slug}`);
   }
-
-  return {
-    frontmatter: {
-      id: data.id,
-      title: data.title,
-      excerpt: data.excerpt,
-      author: data.author,
-      date: data.date,
-      tags: data.tags || [],
-    },
-    content: data.content,
-    slug: data.slug,
-    views: data.views || 0,
-  };
 }
 
 /**
@@ -119,33 +104,41 @@ export async function getPostBySlug(slug: string) {
  * @returns Array of slug strings.
  */
 export async function getPostSlugs(): Promise<string[]> {
-  const { data, error } = await supabase
-    .from("blog_posts")
-    .select("slug")
-    .eq("published", true);
+  try {
+    const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".mdx"));
 
-  if (error) {
+    const slugs: string[] = [];
+
+    for (const file of files) {
+      const filePath = path.join(BLOG_DIR, file);
+      const fileContents = fs.readFileSync(filePath, "utf8");
+      const { data } = matter(fileContents);
+
+      // Validate frontmatter
+      const frontmatter = BlogPostFrontmatterSchema.parse(data);
+
+      // Only include published posts
+      if (frontmatter.published) {
+        slugs.push(frontmatter.slug);
+      }
+    }
+
+    return slugs;
+  } catch (error) {
     reportError("Error fetching post slugs", error);
     return [];
   }
-
-  return data?.map((post) => post.slug) || [];
 }
 
 /**
  * Increments the view counter for a given blog slug.
  *
+ * @deprecated View tracking removed - this is a no-op stub for backward compatibility
  * @param slug - Slug to increment.
  */
 export async function incrementPostViews(slug: string): Promise<boolean> {
-  const { error } = await supabase.rpc("increment_post_views", {
-    post_slug: slug,
-  });
-
-  if (error) {
-    reportError("Error incrementing post views", error);
-    return false;
-  }
-
+  // No-op: View tracking has been removed
+  // This stub remains temporarily for backward compatibility
+  // Will be removed in Task 7
   return true;
 }
