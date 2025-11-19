@@ -21,7 +21,6 @@ import {
 import { Eye, ArrowRight } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { BlogPost } from "@/lib/types";
-import { trackPostView, getViewedPosts } from "@/lib/view-tracking";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import remarkGfm from "remark-gfm";
@@ -31,36 +30,12 @@ interface BlogProps {
 }
 
 export function Blog({ posts: initialPosts }: BlogProps) {
-  const [posts, setPosts] = useState(initialPosts);
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const handlePostClick = async (post: BlogPost) => {
-    // Check if this is the first view in this session
-    const viewedPosts = getViewedPosts();
-    const isFirstView = !viewedPosts.has(post.slug);
-
-    // Track the view (updates database and session storage)
-    await trackPostView(post.slug);
-
-    // Optimistically update the view count
-    // Only increment if this is the first view in the session
-    if (isFirstView) {
-      const updatedPost = { ...post, views: post.views + 1 };
-
-      // Update the posts array so the card reflects the new count
-      setPosts((prevPosts) =>
-        prevPosts.map((p) =>
-          p.slug === post.slug ? updatedPost : p
-        )
-      );
-
-      // Update the modal with the new count
-      setSelectedPost(updatedPost);
-    } else {
-      setSelectedPost(post);
-    }
+  const handlePostClick = (post: BlogPost) => {
+    setSelectedPost(post);
   };
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
@@ -87,7 +62,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post, idx) => (
+          {initialPosts.map((post, idx) => (
             <motion.div
               key={post.id}
               initial={{ opacity: 0, y: 20 }}
@@ -175,7 +150,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
           ))}
         </div>
 
-        {posts.length === 0 && (
+        {initialPosts.length === 0 && (
           <div className="text-center py-12">
             <p className="text-muted-foreground">
               No blog posts yet. Our team is working on great content!

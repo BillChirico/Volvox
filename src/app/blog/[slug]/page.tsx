@@ -7,7 +7,6 @@ import Image from "next/image";
 import { ArrowLeft, Calendar, Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PostViewTracker } from "@/components/post-view-tracker";
 import rehypeHighlight from "rehype-highlight";
 
 export async function generateStaticParams() {
@@ -64,7 +63,6 @@ export default async function BlogPostPage({
 
   return (
     <div className="min-h-screen">
-      <PostViewTracker slug={slug} />
       {/* Header Navigation */}
       <header className="border-b border-border/50 bg-background/70 backdrop-blur-xl">
         <div className="container mx-auto px-4 max-w-4xl">
