@@ -35,6 +35,28 @@ pnpm format
 pnpm format:check
 ```
 
+## Code Quality Requirements
+
+**MANDATORY**: After changing or editing any files, you MUST run the following checks to ensure everything still works properly:
+
+1. **Type Checking**: Run `pnpm build` to verify TypeScript compilation passes
+2. **Linting**: Run `pnpm lint` to check for code quality issues
+3. **Formatting**: Run `pnpm format` to ensure consistent code formatting
+
+These checks are not optional. All three must pass before committing changes. If any check fails, fix the issues before proceeding.
+
+**Workflow:**
+```bash
+# After making changes, run all checks:
+pnpm format && pnpm lint && pnpm build
+```
+
+**Why this matters:**
+- Prevents TypeScript errors from reaching production
+- Maintains consistent code style across the project
+- Catches potential bugs and issues early
+- Ensures CI/CD pipeline will pass
+
 ## Architecture
 
 ### Framework & Routing
