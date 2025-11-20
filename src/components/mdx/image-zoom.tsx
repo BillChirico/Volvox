@@ -13,6 +13,20 @@ interface ImageZoomProps {
   caption?: string;
 }
 
+/**
+ * Renders a thumbnail image that opens a centered, zoomable dialog when activated.
+ *
+ * The thumbnail is keyboard- and mouse-interactive (Enter/Space or click) and displays
+ * an optional caption. When `width` and `height` are provided, the image is rendered
+ * with those dimensions to preserve aspect ratio; otherwise a responsive fallback image is used.
+ *
+ * @param src - Image source URL
+ * @param alt - Alternative text used for accessibility and as a fallback caption
+ * @param width - Optional explicit image width used for sizing when provided together with `height`
+ * @param height - Optional explicit image height used for sizing when provided together with `width`
+ * @param caption - Optional caption displayed below the thumbnail (falls back to `alt` when omitted)
+ * @returns A React element that renders the interactive thumbnail and zoom dialog
+ */
 export function ImageZoom({
   src,
   alt,
