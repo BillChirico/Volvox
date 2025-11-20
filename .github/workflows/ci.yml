@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop, feature/**]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        run: pnpm format:check
+
+      - name: Run linting
+        run: pnpm lint
+
+      - name: Type checking and build
+        run: pnpm build
+
+      - name: Run tests
+        run: pnpm test
+        continue-on-error: true
+
+  summary:
+    name: CI Summary
+    runs-on: ubuntu-latest
+    needs: code-quality
+    if: always()
+
+    steps:
+      - name: Check job status
+        run: |
+          if [ "${{ needs.code-quality.result }}" == "success" ]; then
+            echo "✅ All code quality checks passed!"
+            exit 0
+          else
+            echo "❌ Code quality checks failed. Please fix the issues."
+            exit 1
+          fi
