@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, type ReactElement } from "react";
 import { Check, Copy } from "lucide-react";
 
 interface CodeBlockProps {
@@ -29,13 +29,12 @@ export function CodeBlock({ children, className, filename }: CodeBlockProps) {
 
     if (typeof children === "string") {
       text = children;
-    } else if (
-      children &&
-      typeof children === "object" &&
-      "props" in children &&
-      (children as any).props?.children
-    ) {
-      text = String((children as any).props.children);
+    } else if (children && typeof children === "object") {
+      const element = children as ReactElement<{ children?: string }>;
+      const nested = element.props?.children;
+      if (typeof nested === "string") {
+        text = nested;
+      }
     }
 
     if (!text) {
@@ -77,14 +76,15 @@ export function CodeBlock({ children, className, filename }: CodeBlockProps) {
 
         {/* Copy button */}
         <button
+          type="button"
           onClick={handleCopy}
-          className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200
+          className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity duration-200
                      bg-muted hover:bg-muted/80 text-foreground/80 hover:text-foreground
                      rounded-md p-2 border border-border shadow-sm"
           aria-label={copied ? "Copied!" : "Copy code"}
         >
           {copied ? (
-            <Check className="h-4 w-4 text-[oklch(0.646_0.222_142)]" />
+            <Check className="h-4 w-4 text-green-500" />
           ) : (
             <Copy className="h-4 w-4" />
           )}

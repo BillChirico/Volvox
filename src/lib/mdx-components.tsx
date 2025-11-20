@@ -1,4 +1,5 @@
-import type { HTMLAttributes, ImgHTMLAttributes } from "react";
+import type { HTMLAttributes, ImgHTMLAttributes, ReactElement } from "react";
+import { isValidElement } from "react";
 import { Callout, CodeBlock, ImageZoom } from "@/components/mdx";
 import { HeadingWithAnchor } from "@/components/blog/heading-with-anchor";
 
@@ -15,11 +16,11 @@ export const mdxComponents = {
   ),
 
   // Override default HTML elements
-  pre: ({ children, ...props }: HTMLAttributes<HTMLPreElement>) => {
+  pre: ({ children }: HTMLAttributes<HTMLPreElement> & { children?: ReactElement<{ className?: string; filename?: string }> }) => {
     // Extract the code element and its props
-    const codeElement = (children as any)?.props;
-    const className = codeElement?.className || "";
-    const filename = codeElement?.filename;
+    const codeElement = children;
+    const className = codeElement?.props.className || "";
+    const filename = codeElement?.props.filename;
 
     return (
       <CodeBlock className={className} filename={filename}>
@@ -41,16 +42,16 @@ export const mdxComponents = {
     );
   },
 
-  img: ({ src, alt, width, height, ...props }: ImgHTMLAttributes<HTMLImageElement>) => {
+  img: ({ src, alt, width, height, ...props }: ImgHTMLAttributes<HTMLImageElement> & { "data-caption"?: string }) => {
     // Use caption from data attribute if provided
-    const caption = (props as any)["data-caption"];
+    const caption = props["data-caption"];
 
     return (
       <ImageZoom
         src={typeof src === "string" ? src : ""}
         alt={alt || ""}
-        width={typeof width === "string" ? parseInt(width) : width}
-        height={typeof height === "string" ? parseInt(height) : height}
+        width={typeof width === "string" ? Number.parseInt(width, 10) || undefined : width}
+        height={typeof height === "string" ? Number.parseInt(height, 10) || undefined : height}
         caption={caption}
       />
     );
@@ -68,7 +69,10 @@ export const mdxComponents = {
   // Task lists
   li: ({ children, ...props }: HTMLAttributes<HTMLLIElement>) => {
     // Check if this is a task list item
-    if (typeof children === "object" && (children as any)?.props?.type === "checkbox") {
+    if (
+      isValidElement(children) &&
+      (children.props as { type?: string }).type === "checkbox"
+    ) {
       return (
         <li className="flex items-start gap-2 list-none" {...props}>
           {children}
