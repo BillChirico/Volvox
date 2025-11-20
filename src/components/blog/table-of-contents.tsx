@@ -8,6 +8,13 @@ interface Heading {
   level: number;
 }
 
+/**
+ * Renders a sticky table of contents for h2 and h3 headings on the page and highlights the currently visible section.
+ *
+ * Scans the document for h2 and h3 elements, assigns unique ids when missing, tracks the active heading via an IntersectionObserver, and enables smooth scrolling to a section when its TOC entry is clicked. The component does not render if fewer than three headings are found.
+ *
+ * @returns A navigation element containing the page table of contents, or `null` when there are fewer than three headings.
+ */
 export function TableOfContents() {
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [activeId, setActiveId] = useState<string>("");
