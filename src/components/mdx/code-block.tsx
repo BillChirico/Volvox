@@ -1,12 +1,22 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, isValidElement, ReactElement } from "react";
 import { Check, Copy } from "lucide-react";
 
 interface CodeBlockProps {
   children: ReactNode;
   className?: string;
   filename?: string;
+}
+
+// Type guard to check if a value is a React element with children prop
+function hasChildrenProp(value: unknown): value is ReactElement<{ children: unknown }> {
+  return (
+    isValidElement(value) &&
+    typeof value.props === "object" &&
+    value.props !== null &&
+    "children" in value.props
+  );
 }
 
 /**
@@ -29,13 +39,8 @@ export function CodeBlock({ children, className, filename }: CodeBlockProps) {
 
     if (typeof children === "string") {
       text = children;
-    } else if (
-      children &&
-      typeof children === "object" &&
-      "props" in children &&
-      (children as any).props?.children
-    ) {
-      text = String((children as any).props.children);
+    } else if (hasChildrenProp(children)) {
+      text = String(children.props.children);
     }
 
     if (!text) {

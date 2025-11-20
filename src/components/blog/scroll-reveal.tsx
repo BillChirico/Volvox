@@ -31,14 +31,16 @@ export function ScrollReveal({ children, delay = 0, className = "" }: ScrollReve
       return;
     }
 
+    // Store the element to ensure cleanup unobserves the correct element
+    const element = ref.current;
+    if (!element) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
           // Once visible, stop observing
-          if (ref.current) {
-            observer.unobserve(ref.current);
-          }
+          observer.unobserve(element);
         }
       },
       {
@@ -47,14 +49,10 @@ export function ScrollReveal({ children, delay = 0, className = "" }: ScrollReve
       }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
+    observer.observe(element);
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
+      observer.unobserve(element);
     };
   }, []);
 

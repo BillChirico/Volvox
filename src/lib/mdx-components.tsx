@@ -1,6 +1,22 @@
-import type { HTMLAttributes, ImgHTMLAttributes } from "react";
+import type { HTMLAttributes, ImgHTMLAttributes, ReactElement } from "react";
+import { isValidElement } from "react";
 import { Callout, CodeBlock, ImageZoom } from "@/components/mdx";
 import { HeadingWithAnchor } from "@/components/blog/heading-with-anchor";
+
+// Type guard to check if a value is a React element with props
+function isReactElementWithProps(value: unknown): value is ReactElement<{ className?: string; filename?: string }> {
+  return isValidElement(value) && typeof value.props === "object" && value.props !== null;
+}
+
+// Type guard for checkbox input elements
+function isCheckboxElement(value: unknown): value is ReactElement<{ type: string }> {
+  return isValidElement(value) && typeof value.props === "object" && value.props !== null && "type" in value.props;
+}
+
+// Extended img props to include data-caption
+interface ImgPropsWithCaption extends ImgHTMLAttributes<HTMLImageElement> {
+  "data-caption"?: string;
+}
 
 export const mdxComponents = {
   // Custom components that can be used directly in MDX
@@ -17,9 +33,8 @@ export const mdxComponents = {
   // Override default HTML elements
   pre: ({ children, ...props }: HTMLAttributes<HTMLPreElement>) => {
     // Extract the code element and its props
-    const codeElement = (children as any)?.props;
-    const className = codeElement?.className || "";
-    const filename = codeElement?.filename;
+    const className = isReactElementWithProps(children) ? children.props.className || "" : "";
+    const filename = isReactElementWithProps(children) ? children.props.filename : undefined;
 
     return (
       <CodeBlock className={className} filename={filename}>
@@ -41,9 +56,9 @@ export const mdxComponents = {
     );
   },
 
-  img: ({ src, alt, width, height, ...props }: ImgHTMLAttributes<HTMLImageElement>) => {
+  img: ({ src, alt, width, height, ...props }: ImgPropsWithCaption) => {
     // Use caption from data attribute if provided
-    const caption = (props as any)["data-caption"];
+    const caption = props["data-caption"];
 
     return (
       <ImageZoom
@@ -68,7 +83,7 @@ export const mdxComponents = {
   // Task lists
   li: ({ children, ...props }: HTMLAttributes<HTMLLIElement>) => {
     // Check if this is a task list item
-    if (typeof children === "object" && (children as any)?.props?.type === "checkbox") {
+    if (isCheckboxElement(children) && children.props.type === "checkbox") {
       return (
         <li className="flex items-start gap-2 list-none" {...props}>
           {children}
