@@ -10,7 +10,9 @@ interface CodeBlockProps {
 }
 
 // Type guard to check if a value is a React element with children prop
-function hasChildrenProp(value: unknown): value is ReactElement<{ children: unknown }> {
+function hasChildrenProp(
+  value: unknown
+): value is ReactElement<{ children: unknown }> {
   return (
     isValidElement(value) &&
     typeof value.props === "object" &&

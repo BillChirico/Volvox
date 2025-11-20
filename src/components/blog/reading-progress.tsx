@@ -15,7 +15,8 @@ export function ReadingProgress() {
   useEffect(() => {
     const updateProgress = () => {
       // Get total scrollable height
-      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
 
       // Handle pages with no scrollable content
       if (scrollHeight <= 0) {

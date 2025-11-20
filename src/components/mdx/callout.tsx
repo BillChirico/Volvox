@@ -71,11 +71,7 @@ const defaultTitles: Record<CalloutType, string> = {
  * @param title - Optional title text to display instead of the type's default title
  * @returns A JSX element containing the callout with an icon, optional title, and the provided children
  */
-export function Callout({
-  type = "info",
-  children,
-  title,
-}: CalloutProps) {
+export function Callout({ type = "info", children, title }: CalloutProps) {
   const config = calloutConfig[type];
   const Icon = config.icon;
   const displayTitle = title || defaultTitles[type];

@@ -162,12 +162,12 @@
     --letter-spacing-relaxed: 0.01em;
 
     /* Vertical rhythm - 8px grid */
-    --spacing-1: 0.5rem;  /* 8px */
-    --spacing-2: 1rem;    /* 16px */
-    --spacing-3: 1.5rem;  /* 24px */
-    --spacing-4: 2rem;    /* 32px */
-    --spacing-6: 3rem;    /* 48px */
-    --spacing-8: 4rem;    /* 64px */
+    --spacing-1: 0.5rem; /* 8px */
+    --spacing-2: 1rem; /* 16px */
+    --spacing-3: 1.5rem; /* 24px */
+    --spacing-4: 2rem; /* 32px */
+    --spacing-6: 3rem; /* 48px */
+    --spacing-8: 4rem; /* 64px */
 
     /* Content width for optimal reading */
     --content-width: 70ch;

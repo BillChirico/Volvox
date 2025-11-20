@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, startTransition } from "react";
 
 interface Heading {
   id: string;
@@ -57,7 +57,10 @@ export function TableOfContents() {
       });
     });
 
-    setHeadings(headingData);
+    // Use startTransition for non-urgent state update from DOM
+    startTransition(() => {
+      setHeadings(headingData);
+    });
 
     // Only show TOC if there are 3+ headings
     if (headingData.length < 3) {

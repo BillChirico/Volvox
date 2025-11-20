@@ -4,13 +4,26 @@ import { Callout, CodeBlock, ImageZoom } from "@/components/mdx";
 import { HeadingWithAnchor } from "@/components/blog/heading-with-anchor";
 
 // Type guard to check if a value is a React element with props
-function isReactElementWithProps(value: unknown): value is ReactElement<{ className?: string; filename?: string }> {
-  return isValidElement(value) && typeof value.props === "object" && value.props !== null;
+function isReactElementWithProps(
+  value: unknown
+): value is ReactElement<{ className?: string; filename?: string }> {
+  return (
+    isValidElement(value) &&
+    typeof value.props === "object" &&
+    value.props !== null
+  );
 }
 
 // Type guard for checkbox input elements
-function isCheckboxElement(value: unknown): value is ReactElement<{ type: string }> {
-  return isValidElement(value) && typeof value.props === "object" && value.props !== null && "type" in value.props;
+function isCheckboxElement(
+  value: unknown
+): value is ReactElement<{ type: string }> {
+  return (
+    isValidElement(value) &&
+    typeof value.props === "object" &&
+    value.props !== null &&
+    "type" in value.props
+  );
 }
 
 // Extended img props to include data-caption
@@ -33,8 +46,12 @@ export const mdxComponents = {
   // Override default HTML elements
   pre: ({ children }: HTMLAttributes<HTMLPreElement>) => {
     // Extract the code element and its props
-    const className = isReactElementWithProps(children) ? children.props.className || "" : "";
-    const filename = isReactElementWithProps(children) ? children.props.filename : undefined;
+    const className = isReactElementWithProps(children)
+      ? children.props.className || ""
+      : "";
+    const filename = isReactElementWithProps(children)
+      ? children.props.filename
+      : undefined;
 
     return (
       <CodeBlock className={className} filename={filename}>
@@ -64,8 +81,16 @@ export const mdxComponents = {
       <ImageZoom
         src={typeof src === "string" ? src : ""}
         alt={alt || ""}
-        width={typeof width === "string" ? Number.parseInt(width, 10) || undefined : width}
-        height={typeof height === "string" ? Number.parseInt(height, 10) || undefined : height}
+        width={
+          typeof width === "string"
+            ? Number.parseInt(width, 10) || undefined
+            : width
+        }
+        height={
+          typeof height === "string"
+            ? Number.parseInt(height, 10) || undefined
+            : height
+        }
         caption={caption}
       />
     );

@@ -166,9 +166,13 @@ export function Blog({ posts: initialPosts }: BlogProps) {
         <DialogContent className="max-w-4xl max-h-[90vh] p-0 gap-0 overflow-hidden flex flex-col">
           {selectedPost && (
             <>
-              <DialogHeader className={`sticky top-0 z-10 transition-all duration-200 ${
-                isScrolled ? 'shadow-md bg-background/95 backdrop-blur-sm' : 'bg-background'
-              }`}>
+              <DialogHeader
+                className={`sticky top-0 z-10 transition-all duration-200 ${
+                  isScrolled
+                    ? "shadow-md bg-background/95 backdrop-blur-sm"
+                    : "bg-background"
+                }`}
+              >
                 {/* Progress Bar */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-muted">
                   <div
@@ -231,7 +235,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05, duration: 0.2 }}
                 className="prose prose-slate dark:prose-invert max-w-none px-6 py-8 overflow-y-auto scroll-smooth"
-                style={{ maxHeight: 'calc(90vh - 280px)' }}
+                style={{ maxHeight: "calc(90vh - 280px)" }}
                 onScroll={handleScroll}
               >
                 <ReactMarkdown

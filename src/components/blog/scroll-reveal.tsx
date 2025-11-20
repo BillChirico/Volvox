@@ -18,16 +18,23 @@ interface ScrollRevealProps {
  * @param className - Optional additional CSS class names to apply to the wrapper.
  * @returns The wrapper div element that performs the reveal animation around `children`.
  */
-export function ScrollReveal({ children, delay = 0, className = "" }: ScrollRevealProps) {
-  const [isVisible, setIsVisible] = useState(false);
+export function ScrollReveal({
+  children,
+  delay = 0,
+  className = "",
+}: ScrollRevealProps) {
+  // Use lazy initializer to check reduced motion preference once
+  const [isVisible, setIsVisible] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      : false
+  );
   const ref = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useRef(isVisible);
 
   useEffect(() => {
-    // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (prefersReducedMotion) {
-      setIsVisible(true);
+    // Skip observer if reduced motion is preferred
+    if (prefersReducedMotion.current) {
       return;
     }
 

@@ -20,7 +20,12 @@ interface HeadingWithAnchorProps extends HTMLAttributes<HTMLHeadingElement> {
  * @param id - Optional explicit id to assign to the heading; when omitted an id is derived from `children` or a fallback is generated.
  * @returns A React element for the heading with an inline copy-link button.
  */
-export function HeadingWithAnchor({ as: Component, children, id, ...props }: HeadingWithAnchorProps) {
+export function HeadingWithAnchor({
+  as: Component,
+  children,
+  id,
+  ...props
+}: HeadingWithAnchorProps) {
   const [copied, setCopied] = useState(false);
   const autoId = useId();
 
