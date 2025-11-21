@@ -195,7 +195,7 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
                         variant="outline"
                         size="sm"
                         asChild
-                        className="w-full gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary"
+                        className="w-full gap-2 hover:bg-secondary hover:text-secondary-foreground hover:border-secondary"
                       >
                         <a
                           href={mentor.githubUrl}
@@ -271,7 +271,7 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
                         variant="outline"
                         size="sm"
                         asChild
-                        className="w-full gap-2 mt-4 hover:bg-primary hover:text-primary-foreground hover:border-primary"
+                        className="w-full gap-2 mt-4 hover:bg-secondary hover:text-secondary-foreground hover:border-secondary"
                       >
                         <a
                           href={mentee.githubUrl}

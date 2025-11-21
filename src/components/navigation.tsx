@@ -87,7 +87,7 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
                 className={`text-sm font-medium transition-colors px-4 py-2 rounded-lg relative cursor-pointer ${
                   currentSection === item.id
                     ? "text-primary bg-primary/10"
-                    : "text-foreground hover:text-primary hover:bg-muted"
+                    : "text-foreground hover:text-secondary hover:bg-muted"
                 }`}
               >
                 {item.label}
@@ -168,7 +168,7 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
                       className={`text-left text-lg font-medium transition-colors px-4 py-2 rounded-lg cursor-pointer ${
                         currentSection === item.id
                           ? "text-primary bg-primary/10"
-                          : "text-foreground hover:text-primary hover:bg-muted"
+                          : "text-foreground hover:text-secondary hover:bg-muted"
                       }`}
                     >
                       {item.label}

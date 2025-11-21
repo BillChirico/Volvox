@@ -108,7 +108,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                     </div>
                   </div>
 
-                  <CardTitle className="text-lg line-clamp-2 group-hover:text-primary transition-colors">
+                  <CardTitle className="text-lg line-clamp-2 group-hover:text-secondary transition-colors">
                     {post.title}
                   </CardTitle>
                 </CardHeader>

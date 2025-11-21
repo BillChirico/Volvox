@@ -53,7 +53,7 @@ export function Products({ products }: ProductsProps) {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <Card className="group hover:shadow-2xl hover:shadow-primary/5 transition-[box-shadow,border-color] duration-500 border-2 hover:border-primary/30 overflow-hidden bg-card/80 backdrop-blur-sm">
+          <Card className="group hover:shadow-2xl hover:shadow-secondary/5 transition-[box-shadow,border-color] duration-500 border-2 hover:border-secondary/30 overflow-hidden bg-card/80 backdrop-blur-sm">
             <div className="grid md:grid-cols-2 gap-0">
               <motion.div
                 className="aspect-video md:aspect-auto bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20 relative overflow-hidden"
@@ -75,7 +75,7 @@ export function Products({ products }: ProductsProps) {
 
               <div className="flex flex-col">
                 <CardHeader className="pb-4 pt-6 md:pt-8 px-6 md:px-8">
-                  <CardTitle className="text-2xl md:text-3xl font-bold group-hover:text-primary transition-colors duration-300">
+                  <CardTitle className="text-2xl md:text-3xl font-bold group-hover:text-secondary transition-colors duration-300">
                     {product.name}
                   </CardTitle>
                   <CardDescription className="text-base mt-3 leading-relaxed">
@@ -94,7 +94,7 @@ export function Products({ products }: ProductsProps) {
                         <Badge
                           key={tech}
                           variant="secondary"
-                          className="px-3 py-1 text-xs font-medium hover:bg-primary/10 hover:text-primary transition-colors duration-200"
+                          className="px-3 py-1 text-xs font-medium hover:bg-secondary/10 hover:text-secondary transition-colors duration-200"
                         >
                           {tech}
                         </Badge>
@@ -136,7 +136,7 @@ export function Products({ products }: ProductsProps) {
                       variant="outline"
                       size="lg"
                       asChild
-                      className="flex-1 gap-2 group/btn hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
+                      className="flex-1 gap-2 group/btn hover:border-secondary/50 hover:bg-secondary/5 hover:text-secondary"
                     >
                       <a
                         href={product.githubUrl}
