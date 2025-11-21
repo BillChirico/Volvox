@@ -12,15 +12,19 @@ interface CodeBlockProps {
   wrapperClassName?: string;
 }
 
-// Type guard to check if a value is a React element with children prop
-function hasChildrenProp(
+/**
+ * Type guard to check if a value is a React element with string children.
+ * This is specifically for code blocks where we expect the content to be text.
+ */
+function hasStringChildren(
   value: unknown
-): value is ReactElement<{ children: unknown }> {
+): value is ReactElement<{ children: string }> {
   return (
     isValidElement(value) &&
     typeof value.props === "object" &&
     value.props !== null &&
-    "children" in value.props
+    "children" in value.props &&
+    typeof value.props.children === "string"
   );
 }
 
@@ -50,8 +54,8 @@ export function CodeBlock({
 
     if (typeof children === "string") {
       text = children;
-    } else if (hasChildrenProp(children)) {
-      text = String(children.props.children);
+    } else if (hasStringChildren(children)) {
+      text = children.props.children;
     }
 
     if (!text) {
