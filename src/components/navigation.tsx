@@ -73,7 +73,7 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
                 alt="Volvox Logo"
                 width={32}
                 height={32}
-                className="rounded-lg w-full h-full object-contain"
+                className="w-full h-full object-contain"
               />
             </div>
             <span className="text-xl font-bold text-primary">Volvox</span>
