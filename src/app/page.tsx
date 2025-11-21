@@ -8,22 +8,21 @@ import { reportError } from "@/lib/logger";
  * Renders the homepage server component with resilient data fetching.
  */
 export default async function HomePage() {
-  const [
-    blogPostsResult,
-    productsResult,
-    mentorsResult,
-    menteesResult,
-  ] = await Promise.allSettled([
-    getAllPosts(),
-    getAllProducts(),
-    Promise.resolve(getAllMentors()),
-    Promise.resolve(getAllMentees()),
-  ]);
+  const [blogPostsResult, productsResult, mentorsResult, menteesResult] =
+    await Promise.allSettled([
+      getAllPosts(),
+      getAllProducts(),
+      Promise.resolve(getAllMentors()),
+      Promise.resolve(getAllMentees()),
+    ]);
 
   const blogPosts =
     blogPostsResult.status === "fulfilled" ? blogPostsResult.value : [];
   if (blogPostsResult.status === "rejected") {
-    reportError("Failed to load blog posts for HomePage", blogPostsResult.reason);
+    reportError(
+      "Failed to load blog posts for HomePage",
+      blogPostsResult.reason
+    );
   }
 
   const products =

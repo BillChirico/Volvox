@@ -65,7 +65,7 @@ Enhancement of existing blog post page (`src/app/blog/[slug]/page.tsx`) in three
 
 ### File Structure
 
-```
+```text
 src/
 ├── components/mdx/
 │   ├── callout.tsx
@@ -101,11 +101,13 @@ src/
 ### Code Styling
 
 **Inline code:**
+
 - Sharp borders
 - Larger padding
 - Background with subtle border
 
 **Code blocks:**
+
 - Custom syntax theme using brand colors:
   - Purple (`--primary`) for keywords
   - Blue (`--accent`) for strings
@@ -122,11 +124,13 @@ src/
 ### Tables & Lists
 
 **Tables:**
+
 - Striped rows
 - Sticky headers for long tables
 - Responsive horizontal scroll
 
 **Lists:**
+
 - Custom bullet styles
 - Nested indentation
 - Checkbox support for task lists
@@ -192,7 +196,7 @@ src/
 
 ### File Structure
 
-```
+```text
 src/
 ├── app/blog/[slug]/
 │   ├── page.tsx (enhanced prose classes)
