@@ -3,6 +3,7 @@
 import { useState, useId, type HTMLAttributes, type ReactNode } from "react";
 import { Link2, Check } from "lucide-react";
 import { generateHeadingId, cn } from "@/lib/utils";
+import { reportError } from "@/lib/logger";
 
 interface HeadingWithAnchorProps extends HTMLAttributes<HTMLHeadingElement> {
   as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -51,7 +52,7 @@ export function HeadingWithAnchor({
         setAnnounceText("");
       }, 2000);
     } catch (err) {
-      console.error("Failed to copy link:", err);
+      reportError("HeadingWithAnchor: Failed to copy link to clipboard", err);
       setAnnounceText("Failed to copy link");
     }
   };

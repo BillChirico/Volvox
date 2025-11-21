@@ -3,6 +3,7 @@
 import { ReactNode, useState, isValidElement, ReactElement } from "react";
 import { Check, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { reportError } from "@/lib/logger";
 
 interface CodeBlockProps {
   children: ReactNode;
@@ -54,7 +55,10 @@ export function CodeBlock({
     }
 
     if (!text) {
-      console.warn("No text content found to copy");
+      reportError(
+        "CodeBlock: No text content found to copy",
+        new Error("Empty code block content")
+      );
       return;
     }
 
@@ -63,7 +67,7 @@ export function CodeBlock({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error("Failed to copy:", err);
+      reportError("CodeBlock: Failed to copy to clipboard", err);
     }
   };
 
