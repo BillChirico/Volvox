@@ -108,7 +108,11 @@ export const mdxComponents = {
   // Task lists
   li: ({ children, ...props }: HTMLAttributes<HTMLLIElement>) => {
     // Check if this is a task list item
-    if (isCheckboxElement(children) && children.props.type === "checkbox") {
+    // In Markdown task lists, children is typically an array like [checkbox, text]
+    const childArray = Array.isArray(children) ? children : [children];
+    const firstChild = childArray[0];
+
+    if (isCheckboxElement(firstChild) && firstChild.props.type === "checkbox") {
       return (
         <li className="flex items-start gap-2 list-none" {...props}>
           {children}

@@ -48,7 +48,7 @@ export function TableOfContents() {
       headingData.push({
         id,
         text: element.textContent || "",
-        level: parseInt(element.tagName.substring(1)),
+        level: parseInt(element.tagName.substring(1), 10),
       });
     });
 
