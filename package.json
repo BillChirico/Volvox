@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/**/*.test.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
