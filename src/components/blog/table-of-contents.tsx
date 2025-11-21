@@ -26,9 +26,10 @@ export function TableOfContents() {
     const headingData: Heading[] = [];
     const seenIds = new Set<string>();
 
-    elements.forEach((element) => {
+    elements.forEach((element, index) => {
       const baseId =
-        element.id || generateHeadingId(element.textContent || "") || "";
+        element.id ||
+        generateHeadingId(element.textContent || "", `heading-${index}`);
       let id = baseId;
       let counter = 1;
 

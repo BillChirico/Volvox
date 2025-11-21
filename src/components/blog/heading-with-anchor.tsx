@@ -35,7 +35,7 @@ export function HeadingWithAnchor({
   const headingId =
     id ||
     (typeof children === "string"
-      ? generateHeadingId(children)
+      ? generateHeadingId(children, `heading-${autoId}`)
       : `heading-${autoId}`);
 
   const handleCopyLink = async () => {
