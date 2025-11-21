@@ -13,8 +13,12 @@ import { Footer } from "@/components/footer";
  */
 export function PrivacyClient() {
   const handleNavigate = (section: string) => {
+    // Navigate to home page for all sections since they're on the home page
     if (section === "home") {
       window.location.href = "/";
+    } else {
+      // For other sections (products, blog, mentorship, about), go to home page with section
+      window.location.href = `/#${section}`;
     }
   };
 

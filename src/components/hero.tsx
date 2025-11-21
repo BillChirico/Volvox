@@ -43,12 +43,12 @@ export function Hero({ onNavigate }: HeroProps) {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="mb-6"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8">
+          <div className="group inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 hover:bg-secondary/10 hover:border-secondary/20 transition-colors duration-300">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 group-hover:bg-secondary transition-colors duration-300"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary group-hover:bg-secondary transition-colors duration-300"></span>
             </span>
-            <span className="text-sm font-medium text-primary">
+            <span className="text-sm font-medium text-primary group-hover:text-secondary transition-colors duration-300">
               Building the future of software development
             </span>
           </div>
