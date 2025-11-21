@@ -139,12 +139,12 @@ export function About() {
         </div>
 
         <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-primary/10 border border-primary/20">
+          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-primary/10 border border-primary/20 transition-colors hover:text-secondary group cursor-pointer">
             <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 group-hover:bg-secondary"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-primary group-hover:bg-secondary transition-colors"></span>
             </span>
-            <span className="text-base font-medium text-primary">
+            <span className="text-base font-medium text-primary group-hover:text-secondary transition-colors">
               From Volvox with ❤️
             </span>
           </div>
