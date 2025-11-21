@@ -2,11 +2,13 @@
 
 import { ReactNode, useState, isValidElement, ReactElement } from "react";
 import { Check, Copy } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface CodeBlockProps {
   children: ReactNode;
   className?: string;
   filename?: string;
+  wrapperClassName?: string;
 }
 
 // Type guard to check if a value is a React element with children prop
@@ -25,11 +27,17 @@ function hasChildrenProp(
  * Render a styled code block with an optional filename/language header and a copy-to-clipboard button.
  *
  * @param children - Code content to render; may be a raw string or a code element whose children contain the text to display and copy.
- * @param className - Optional class name (e.g., "language-typescript"); the language label is derived by removing the "language-" prefix and defaults to "plaintext".
+ * @param className - Optional class name for the `<pre>` element (e.g., "language-typescript"); the language label is derived by removing the "language-" prefix and defaults to "plaintext".
  * @param filename - Optional filename to show in the header bar.
+ * @param wrapperClassName - Optional class name for the wrapper div; merged with "group relative my-6" to allow safe style extension.
  * @returns A JSX element representing the code block with header (when filename or language is present) and an accessible copy button.
  */
-export function CodeBlock({ children, className, filename }: CodeBlockProps) {
+export function CodeBlock({
+  children,
+  className,
+  filename,
+  wrapperClassName,
+}: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
 
   // Extract language from className (e.g., "language-typescript" -> "typescript")
@@ -60,7 +68,7 @@ export function CodeBlock({ children, className, filename }: CodeBlockProps) {
   };
 
   return (
-    <div className="group relative my-6">
+    <div className={cn("group relative my-6", wrapperClassName)}>
       {/* Header with filename and/or language badge */}
       {(filename || language) && (
         <div className="flex items-center justify-between bg-muted/50 border border-b-0 border-border rounded-t-lg px-4 py-2 text-xs">
