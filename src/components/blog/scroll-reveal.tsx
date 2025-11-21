@@ -71,7 +71,7 @@ export function ScrollReveal({
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-out ${className}`}
+      className={`transition-[opacity,transform] duration-700 ease-out ${className}`}
       style={{
         opacity: isVisible ? 1 : 0,
         transform: isVisible ? "translateY(0)" : "translateY(20px)",

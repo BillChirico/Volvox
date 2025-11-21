@@ -72,7 +72,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
               whileHover={{ scale: 1.02 }}
             >
               <Card
-                className="group cursor-pointer hover:shadow-xl transition-all duration-300 overflow-hidden h-full"
+                className="group cursor-pointer hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full"
                 onClick={() => handlePostClick(post)}
               >
                 <motion.div
@@ -167,7 +167,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
           {selectedPost && (
             <>
               <DialogHeader
-                className={`sticky top-0 z-10 transition-all duration-200 ${
+                className={`sticky top-0 z-10 transition-[box-shadow,background-color] duration-200 ${
                   isScrolled
                     ? "shadow-md bg-background/95 backdrop-blur-sm"
                     : "bg-background"
@@ -176,7 +176,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                 {/* Progress Bar */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-muted">
                   <div
-                    className="h-full bg-gradient-to-r from-primary via-primary/80 to-primary/60 transition-all duration-150 ease-out"
+                    className="h-full bg-gradient-to-r from-primary via-primary/80 to-primary/60 transition-[width] duration-150 ease-out"
                     style={{ width: `${scrollProgress}%` }}
                   />
                 </div>
