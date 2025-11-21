@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { Navigation } from "@/components/navigation";
 import { Hero } from "@/components/hero";
@@ -32,7 +32,7 @@ export function HomepageClient({
 }: HomepageClientProps) {
   const [currentSection, setCurrentSection] = useState("home");
 
-  const handleNavigate = (section: string) => {
+  const handleNavigate = useCallback((section: string) => {
     setCurrentSection(section);
 
     if (section === "home") {
@@ -50,7 +50,18 @@ export function HomepageClient({
         });
       }
     }
-  };
+  }, []);
+
+  // Handle URL hash on initial load
+  useEffect(() => {
+    const hash = window.location.hash.slice(1); // Remove the '#'
+    if (hash) {
+      // Wait for the page to render before scrolling
+      setTimeout(() => {
+        handleNavigate(hash);
+      }, 100);
+    }
+  }, [handleNavigate]);
 
   useEffect(() => {
     const handleScroll = () => {
