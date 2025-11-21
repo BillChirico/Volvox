@@ -151,11 +151,11 @@ export default async function BlogPostPage({
             className="prose prose-lg dark:prose-invert max-w-none
           prose-headings:text-foreground
           prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl
-          prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+          prose-a:text-secondary prose-a:no-underline hover:prose-a:underline
           prose-strong:text-foreground
           prose-code:text-secondary prose-code:bg-muted
           prose-pre:bg-card prose-pre:border prose-pre:border-border
-          prose-blockquote:border-l-primary prose-blockquote:border-l-4 prose-blockquote:pl-4 prose-blockquote:italic
+          prose-blockquote:border-l-secondary prose-blockquote:border-l-4 prose-blockquote:pl-4 prose-blockquote:italic
           prose-ul:list-disc prose-ol:list-decimal
           prose-img:rounded-lg prose-img:border prose-img:border-border prose-img:shadow-sm
         "

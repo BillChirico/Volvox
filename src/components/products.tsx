@@ -155,7 +155,7 @@ export function Products({ products }: ProductsProps) {
                     <Button
                       size="lg"
                       asChild
-                      className="flex-1 gap-2 group/btn shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30"
+                      className="flex-1 gap-2 group/btn shadow-lg shadow-secondary/20 hover:shadow-xl hover:shadow-secondary/30"
                     >
                       <a
                         href={product.demoUrl}
