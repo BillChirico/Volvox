@@ -2,6 +2,7 @@
 
 import { useState, useId, type HTMLAttributes, type ReactNode } from "react";
 import { Link2, Check } from "lucide-react";
+import { generateHeadingId } from "@/lib/utils";
 
 interface HeadingWithAnchorProps extends HTMLAttributes<HTMLHeadingElement> {
   as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -34,12 +35,7 @@ export function HeadingWithAnchor({
   const headingId =
     id ||
     (typeof children === "string"
-      ? children
-          .toLowerCase()
-          .trim()
-          .replace(/\s+/g, "-")
-          .replace(/[^a-z0-9-_]/g, "")
-          .replace(/^-+|-+$/g, "") // Remove leading/trailing hyphens
+      ? generateHeadingId(children)
       : `heading-${autoId}`);
 
   const handleCopyLink = async () => {

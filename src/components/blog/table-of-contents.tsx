@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, startTransition } from "react";
+import { generateHeadingId } from "@/lib/utils";
 
 interface Heading {
   id: string;
@@ -27,14 +28,7 @@ export function TableOfContents() {
 
     elements.forEach((element) => {
       const baseId =
-        element.id ||
-        element.textContent
-          ?.toLowerCase()
-          .trim()
-          .replace(/\s+/g, "-")
-          .replace(/[^a-z0-9-_]/g, "")
-          .replace(/^-+|-+$/g, "") ||
-        "";
+        element.id || generateHeadingId(element.textContent || "") || "";
       let id = baseId;
       let counter = 1;
 
