@@ -23,11 +23,17 @@ export function Hero({ onNavigate }: HeroProps) {
     const x = (rect.left + rect.width / 2) / window.innerWidth;
     const y = (rect.top + rect.height / 2) / window.innerHeight;
 
-    void confettiLib({
+    const promise = confettiLib({
       particleCount: 100,
       spread: 70,
       origin: { x, y },
     });
+
+    if (promise) {
+      promise.catch((err) => {
+        console.error("Confetti animation failed:", err);
+      });
+    }
   };
 
   const handleDiscordClick = (e: React.MouseEvent) => {
@@ -35,11 +41,17 @@ export function Hero({ onNavigate }: HeroProps) {
     const x = (rect.left + rect.width / 2) / window.innerWidth;
     const y = (rect.top + rect.height / 2) / window.innerHeight;
 
-    void confettiLib({
+    const promise = confettiLib({
       particleCount: 100,
       spread: 70,
       origin: { x, y },
     });
+
+    if (promise) {
+      promise.catch((err) => {
+        console.error("Confetti animation failed:", err);
+      });
+    }
   };
 
   return (

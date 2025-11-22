@@ -30,7 +30,7 @@ export function About() {
       origin: { x, y },
       colors: ["#6446ff", "#c864ff", "#78b4ff", "#9678ff", "#b464ff"],
     });
-    
+
     if (promise) {
       promise.catch((err) => {
         // Log confetti animation errors for debugging; effect is non-critical
