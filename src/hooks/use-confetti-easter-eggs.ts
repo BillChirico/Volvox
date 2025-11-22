@@ -21,7 +21,7 @@ export function useConfettiEasterEggs(elementSelectors: string[]) {
 
         const confettiVariations = [
           () => {
-            confettiLib({
+            void confettiLib({
               particleCount: 100,
               spread: 70,
               origin: { y: 0.6 },
@@ -34,7 +34,7 @@ export function useConfettiEasterEggs(elementSelectors: string[]) {
             };
 
             function fire(particleRatio: number, opts: confettiLib.Options) {
-              confettiLib({
+              void confettiLib({
                 ...defaults,
                 ...opts,
                 particleCount: Math.floor(count * particleRatio),
@@ -65,13 +65,13 @@ export function useConfettiEasterEggs(elementSelectors: string[]) {
             });
           },
           () => {
-            confettiLib({
+            void confettiLib({
               particleCount: 150,
               angle: 60,
               spread: 55,
               origin: { x: 0 },
             });
-            confettiLib({
+            void confettiLib({
               particleCount: 150,
               angle: 120,
               spread: 55,
@@ -84,14 +84,14 @@ export function useConfettiEasterEggs(elementSelectors: string[]) {
             const colors = ["#667eea", "#764ba2", "#f093fb", "#4facfe"];
 
             const frame = () => {
-              confettiLib({
+              void confettiLib({
                 particleCount: 2,
                 angle: 60,
                 spread: 55,
                 origin: { x: 0 },
                 colors: colors,
               });
-              confettiLib({
+              void confettiLib({
                 particleCount: 2,
                 angle: 120,
                 spread: 55,
@@ -106,7 +106,7 @@ export function useConfettiEasterEggs(elementSelectors: string[]) {
             frame();
           },
           () => {
-            confettiLib({
+            void confettiLib({
               particleCount: 100,
               startVelocity: 30,
               spread: 360,
@@ -126,14 +126,14 @@ export function useConfettiEasterEggs(elementSelectors: string[]) {
               startVelocity: 30,
             };
 
-            confettiLib({
+            void confettiLib({
               ...defaults,
               particleCount: 40,
               scalar: 1.2,
               shapes: ["star"],
             });
 
-            confettiLib({
+            void confettiLib({
               ...defaults,
               particleCount: 10,
               scalar: 0.75,

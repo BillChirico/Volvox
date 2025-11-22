@@ -46,7 +46,7 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
     const x = (rect.left + rect.width / 2) / window.innerWidth;
     const y = (rect.top + rect.height / 2) / window.innerHeight;
 
-    confettiLib({
+    void confettiLib({
       particleCount: 100,
       spread: 70,
       origin: { x, y },

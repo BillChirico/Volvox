@@ -3,6 +3,7 @@
 import { Navigation } from "@/components/navigation";
 import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
+import { useRouter } from "next/navigation";
 
 /**
  * Renders the Privacy Policy page with an animated background, top navigation, and footer.
@@ -12,13 +13,15 @@ import { Footer } from "@/components/footer";
  * @returns The Privacy Policy React element
  */
 export function PrivacyClient() {
+  const router = useRouter();
+
   const handleNavigate = (section: string) => {
     // Navigate to home page for all sections since they're on the home page
     if (section === "home") {
-      window.location.href = "/";
+      router.push("/");
     } else {
       // For other sections (products, blog, mentorship, about), go to home page with section
-      window.location.href = `/#${section}`;
+      router.push(`/#${section}`);
     }
   };
 

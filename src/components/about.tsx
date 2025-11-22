@@ -20,19 +20,23 @@ import confettiLib from "canvas-confetti";
  */
 export function About() {
   const handleConfetti = (e: React.MouseEvent) => {
-    const rect = (e.target as HTMLElement).getBoundingClientRect();
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     const x = (rect.left + rect.width / 2) / window.innerWidth;
     const y = (rect.top + rect.height / 2) / window.innerHeight;
 
-    confettiLib({
+    const promise = confettiLib({
       particleCount: 50,
       spread: 60,
       origin: { x, y },
       colors: ["#6446ff", "#c864ff", "#78b4ff", "#9678ff", "#b464ff"],
-    }).catch((err) => {
-      // Log confetti animation errors for debugging; effect is non-critical
-      console.error("Confetti animation failed:", err);
     });
+    
+    if (promise) {
+      promise.catch((err) => {
+        // Log confetti animation errors for debugging; effect is non-critical
+        console.error("Confetti animation failed:", err);
+      });
+    }
   };
 
   return (

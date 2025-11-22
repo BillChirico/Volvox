@@ -34,7 +34,7 @@ interface MentorshipProps {
  *
  * @param mentors - Array of mentor objects used to render mentor profile cards and their details (avatar, name, role, bio, expertise, optional profile link).
  * @param mentees - Array of mentee objects used to render mentee profile cards and their details (avatar, name, goals, progress, optional profile link).
- * @returns The JSX element for the Mentorship section. 
+ * @returns The JSX element for the Mentorship section.
  */
 export function Mentorship({ mentors, mentees }: MentorshipProps) {
   const handleDiscordClick = (e: React.MouseEvent) => {
@@ -42,7 +42,7 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
     const x = (rect.left + rect.width / 2) / window.innerWidth;
     const y = (rect.top + rect.height / 2) / window.innerHeight;
 
-    confettiLib({
+    void confettiLib({
       particleCount: 100,
       spread: 70,
       origin: { x, y },
