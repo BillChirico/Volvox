@@ -5,11 +5,11 @@ import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
 
 /**
- * Privacy Policy Client Component
+ * Renders the Privacy Policy page with an animated background, top navigation, and footer.
  *
- * Client-side component that displays the privacy policy with navigation and animated background.
+ * Navigation links navigate to the home page when the "home" section is selected or to the home page with a hash fragment for other sections.
  *
- * @returns The privacy policy client component
+ * @returns The Privacy Policy React element
  */
 export function PrivacyClient() {
   const handleNavigate = (section: string) => {

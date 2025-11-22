@@ -9,8 +9,9 @@ import { useTheme } from "@/components/providers/theme-provider";
 import { motion } from "framer-motion";
 
 /**
- * Client component for the blog post page header navigation.
- * Includes back button, logo, theme toggle, and social links.
+ * Renders the blog post header with back-to-home navigation, branding, a theme toggle, and social links.
+ *
+ * @returns The header JSX element containing navigation controls, logo/title, theme toggle button, and social icons.
  */
 export function BlogPostHeader() {
   const { theme, setTheme } = useTheme();

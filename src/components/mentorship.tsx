@@ -27,6 +27,15 @@ interface MentorshipProps {
   mentees: Mentee[];
 }
 
+/**
+ * Render the Mentorship section showcasing program features, a mentors tab, a featured mentees tab, and a call-to-action.
+ *
+ * Renders animated overview cards, a tabbed list of mentor and mentee profile cards (with conditional empty-state messages), and action buttons including a Discord join button that triggers a confetti effect on click.
+ *
+ * @param mentors - Array of mentor objects used to render mentor profile cards and their details (avatar, name, role, bio, expertise, optional profile link).
+ * @param mentees - Array of mentee objects used to render mentee profile cards and their details (avatar, name, goals, progress, optional profile link).
+ * @returns The JSX element for the Mentorship section. 
+ */
 export function Mentorship({ mentors, mentees }: MentorshipProps) {
   const handleDiscordClick = (e: React.MouseEvent) => {
     const rect = (e.target as HTMLElement).getBoundingClientRect();

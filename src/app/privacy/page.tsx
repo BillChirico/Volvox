@@ -18,11 +18,9 @@ export const metadata: Metadata = {
 };
 
 /**
- * Privacy Policy Page Component
+ * Render the Privacy Policy page layout, delegating interactive behavior to client-side components.
  *
- * Server component that renders the privacy policy page with client-side navigation.
- *
- * @returns The privacy policy page
+ * @returns A JSX element representing the Privacy Policy page
  */
 export default function PrivacyPage() {
   return <PrivacyClient />;
