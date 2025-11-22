@@ -17,6 +17,14 @@ interface ProductsProps {
   products: Product[];
 }
 
+/**
+ * Render a "Featured Product" section that displays the first product from the provided list or a placeholder when no product is available.
+ *
+ * Renders a responsive card for the first product in `products` including the product name, description, key features, and optional action buttons and long description. If `products` is empty, renders a centered placeholder message.
+ *
+ * @param products - Array of products; only the first product in the array is shown. Optional product fields `githubUrl`, `demoUrl`, and `longDescription` control rendering of the corresponding actions and expanded description.
+ * @returns The JSX element for the featured product section or a fallback placeholder.
+ */
 export function Products({ products }: ProductsProps) {
   const product = products[0];
 

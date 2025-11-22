@@ -11,6 +11,13 @@ import { Code, Lightbulb, Heart, Target } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import confettiLib from "canvas-confetti";
 
+/**
+ * Renders the "About Volvox" section with informational cards, animated highlights, and a GitHub CTA that spawns confetti on hover.
+ *
+ * The component includes company story, mission, values, animated service cards, and an external link to the Volvox GitHub which triggers a localized confetti effect when hovered.
+ *
+ * @returns The JSX element for the About section.
+ */
 export function About() {
   const handleConfetti = (e: React.MouseEvent) => {
     const rect = (e.target as HTMLElement).getBoundingClientRect();

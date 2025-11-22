@@ -20,9 +20,16 @@ interface HomepageClientProps {
 }
 
 /**
- * Client-side shell that renders the scrolling homepage layout.
+ * Render the scrolling homepage and manage section navigation and deep-link scrolling.
  *
- * @param props - Prefetched collections required by the sections.
+ * Handles in-page navigation (including URL hash on initial load), updates the active
+ * navigation section based on scroll position, and renders the page sections.
+ *
+ * @param blogPosts - Prefetched blog posts to display in the Blog section.
+ * @param products - Prefetched products to display in the Products section.
+ * @param mentors - Prefetched mentors to display in the Mentorship section.
+ * @param mentees - Prefetched mentees to display in the Mentorship section.
+ * @returns The rendered homepage JSX element.
  */
 export function HomepageClient({
   blogPosts,

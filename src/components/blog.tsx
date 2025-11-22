@@ -29,6 +29,16 @@ interface BlogProps {
   posts: BlogPost[];
 }
 
+/**
+ * Render the Blog section with a responsive grid of post cards and an in-place reader modal.
+ *
+ * Displays the provided posts as interactive cards; clicking a card opens a dialog that shows
+ * the selected post's author, metadata, tags, and rendered Markdown content with a scroll progress bar
+ * and controls to close the dialog or navigate to the full article page.
+ *
+ * @param posts - Array of blog posts to display in the grid
+ * @returns The Blog section JSX element containing the posts grid and the post dialog
+ */
 export function Blog({ posts: initialPosts }: BlogProps) {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);

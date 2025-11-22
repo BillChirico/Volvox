@@ -4,12 +4,9 @@ import Link from "next/link";
 import { version } from "../../package.json";
 
 /**
- * Footer Component
+ * Renders the site footer with a Privacy Policy link, current year copyright, and package version.
  *
- * Displays the site footer with copyright information, version number,
- * and links to legal pages.
- *
- * @returns The footer component
+ * @returns The footer JSX element containing the legal link, copyright notice (current year), and package version.
  */
 export function Footer() {
   return (

@@ -9,6 +9,14 @@ interface HeroProps {
   onNavigate: (section: string) => void;
 }
 
+/**
+ * Render the hero section for the Volvox landing page.
+ *
+ * Clicking the main title or the Discord link emits a confetti animation at the click position.
+ *
+ * @param onNavigate - Callback invoked with a section identifier (e.g., `"products"`, `"mentorship"`) when an action requests navigation
+ * @returns A React element representing the hero section
+ */
 export function Hero({ onNavigate }: HeroProps) {
   const handleTitleClick = (e: React.MouseEvent) => {
     const rect = (e.target as HTMLElement).getBoundingClientRect();
