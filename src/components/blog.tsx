@@ -29,6 +29,16 @@ interface BlogProps {
   posts: BlogPost[];
 }
 
+/**
+ * Render the Blog section with a responsive grid of post cards and an in-place reader modal.
+ *
+ * Displays the provided posts as interactive cards; clicking a card opens a dialog that shows
+ * the selected post's author, metadata, tags, and rendered Markdown content with a scroll progress bar
+ * and controls to close the dialog or navigate to the full article page.
+ *
+ * @param posts - Array of blog posts to display in the grid
+ * @returns The Blog section JSX element containing the posts grid and the post dialog
+ */
 export function Blog({ posts: initialPosts }: BlogProps) {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -108,7 +118,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                     </div>
                   </div>
 
-                  <CardTitle className="text-lg line-clamp-2 group-hover:text-primary transition-colors">
+                  <CardTitle className="text-lg line-clamp-2 group-hover:text-secondary transition-colors">
                     {post.title}
                   </CardTitle>
                 </CardHeader>
@@ -163,7 +173,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
           setIsScrolled(false);
         }}
       >
-        <DialogContent className="max-w-4xl max-h-[90vh] p-0 gap-0 overflow-hidden flex flex-col">
+        <DialogContent className="w-[80vw] max-w-none sm:max-w-none h-[80vh] p-0 gap-0 overflow-hidden flex flex-col">
           {selectedPost && (
             <>
               <DialogHeader
@@ -251,7 +261,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                 <Button
                   variant="ghost"
                   onClick={() => setSelectedPost(null)}
-                  className="text-muted-foreground transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                  className="text-muted-foreground transition-transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                 >
                   Back
                 </Button>
