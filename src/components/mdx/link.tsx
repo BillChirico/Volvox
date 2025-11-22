@@ -27,7 +27,7 @@ export function CustomLink({
     );
   }
 
-  const isInternal = href.startsWith("/") || href.startsWith("#");
+  const isInternal = (href.startsWith("/") && !href.startsWith("//")) || href.startsWith("#");
 
   if (isInternal) {
     return (
@@ -50,14 +50,14 @@ export function CustomLink({
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "font-medium text-primary underline underline-offset-4 decoration-border hover:decoration-primary transition-colors inline-flex items-center gap-0.5",
+        "font-medium text-primary underline underline-offset-4 decoration-border hover:decoration-primary transition-colors inline-flex items-center gap-1",
         className
       )}
       {...props}
     >
       {children}
       <ExternalLink
-        className="h-3 w-3 inline-block ml-0.5"
+        className="h-3 w-3 inline-block"
         aria-hidden="true"
       />
     </a>
